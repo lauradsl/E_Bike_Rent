@@ -12,7 +12,6 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Table(name = "CATEGORIAS")
 public class Categoria {
     @Id

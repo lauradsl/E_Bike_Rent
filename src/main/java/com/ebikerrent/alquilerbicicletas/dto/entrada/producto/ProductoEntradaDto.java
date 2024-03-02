@@ -35,9 +35,12 @@ public class ProductoEntradaDto {
     @JsonProperty("imagenes")
     private Set<ImagenEntradaDto> imagenEntradaDto = new HashSet<>();
 
-    @Valid//Valida en su propia clase
+    /*@Valid//Valida en su propia clase
     @JsonProperty("categoria")
-    private Long categoriaEntradaDto;
+    private Long categoriaEntradaDto;*/
+
+    @JsonProperty("categoria")
+    private String categoriaE;
 
 
 }

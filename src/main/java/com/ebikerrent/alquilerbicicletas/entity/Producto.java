@@ -1,5 +1,7 @@
 package com.ebikerrent.alquilerbicicletas.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +12,6 @@ import java.util.Set;
 @Entity
 @Setter
 @Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "PRODUCTOS", uniqueConstraints = @UniqueConstraint(columnNames = {"NOMBRE"}))
@@ -33,18 +34,12 @@ public class Producto {
     @Column(name = "categoria_id")
     private Long categoriaId;
 
+
+    private String categoriaP;
+
     /*@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private Categoria categoria;*/
 
-    @Override
-    public String toString() {
-        return "Producto{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", imagenes=" + imagenes +
-                ", categoria=" + categoriaId +
-                '}';
-    }
+
 }

@@ -18,14 +18,16 @@ public class ProductoSalidaDto {
     private String nombre;
     private String descripcion;
 
+    @JsonProperty("categoria")
+    private String categoria;
+
     @JsonProperty("imagenes")
     private Set<ImagenSalidaDto> imagenSalidaDto= new HashSet<>();
 
-    @JsonProperty("categoria")
-    private Long categoria;
+    //@JsonProperty("categoria")
+    //private Long categoria;
 
-    //@JsonProperty("titulo_categoria")
-    //private String nombreCategoria;
+
 
 
 }

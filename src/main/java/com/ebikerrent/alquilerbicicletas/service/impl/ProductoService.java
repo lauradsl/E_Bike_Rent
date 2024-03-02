@@ -37,9 +37,26 @@ public class ProductoService implements IProductoService {
             LOGGER.info("Ya existe un producto con el mismo nombre");
             throw new ResourceNotFoundException("Existe un producto con el mismo nombre");
         }
+        LOGGER.info("CATEGORIA ENTRADA: " + productoEntradaDto.getCategoriaE());
+        Categoria categoria = categoriaRepository.findByTitulo(productoEntradaDto.getCategoriaE());
+        if (categoria == null) {
 
+            throw new ResourceNotFoundException("No se encontró la categoría con el título proporcionado. Si es una nueva categoria, debe crearla antes de registrar el producto");
+        }
+        LOGGER.info("CATEGORIA ENTRADA DESPUES DEL IF: " + categoria.getTitulo());
 
-        Long capturarCategoria = productoEntradaDto.getCategoriaEntradaDto();
+        Producto productoRecibido = dtoEntradaAentidad((productoEntradaDto));
+        productoRecibido.setCategoriaP(categoria.getTitulo());
+        productoRecibido.setCategoriaId(categoria.getId());
+        LOGGER.info("CATEGORIA SETEADA ID: " + productoRecibido.getCategoriaId() + " CATEGORIA NOMBRE " + productoRecibido.getCategoriaP());
+        Producto productoRegistrado = productoRepository.save(productoRecibido);
+        LOGGER.info("CATEGORIA GUARDADA ID: " + productoRegistrado.getCategoriaId() + " CATEGORIA GUARDADA " + productoRegistrado.getCategoriaP());
+        ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(productoRegistrado);
+        LOGGER.info(" CATEGORIA NOMBRE " +productoSalidaDto.getCategoria());
+
+        return productoSalidaDto;
+
+        /*Long capturarCategoria = productoEntradaDto.getCategoriaEntradaDto();
         Categoria categoria = categoriaRepository.findById(capturarCategoria)
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontró la categoría con el ID proporcionado"));
 
@@ -52,7 +69,7 @@ public class ProductoService implements IProductoService {
 
         ProductoSalidaDto productoResultado = entidadAdtoSalida(productoRegistrado);
 
-        return productoResultado;
+        return productoResultado;*/
     }
 
     @Override
@@ -169,6 +186,7 @@ public class ProductoService implements IProductoService {
 
     public ProductoSalidaDto entidadAdtoSalida(Producto producto){
         return modelMapper.map(producto, ProductoSalidaDto.class);
+
     }
     public Producto dtoSalidaAentidad (ProductoSalidaDto productoSalidaDto){
         return modelMapper.map(productoSalidaDto, Producto.class);

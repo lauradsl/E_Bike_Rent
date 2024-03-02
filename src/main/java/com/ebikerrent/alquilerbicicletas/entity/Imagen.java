@@ -9,7 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString
 @Table(name = "IMAGENES")
 public class Imagen {
     @Id
@@ -27,7 +26,6 @@ public class Imagen {
     @JoinColumn(name = "producto_id", referencedColumnName = "id")
     @JsonIgnore
     private Producto producto;
-
 
 
 }
