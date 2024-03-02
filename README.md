@@ -1,2 +1,2 @@
-# E_Bke_Rent
+# E_Bike_Rent
 Proyecto Integrador. Modificaciones realizadas por Laura Salamanca
