@@ -16,10 +16,6 @@ import lombok.Setter;
 public class CategoriaEntradaDto {
     @NotNull(message = "Este campo Categoria no debe ser nulo")
     @NotBlank(message = "Este campo no debe estar vacío")
-
-    //Si la BD esta poblada
-    //private Long categoria_id;
-
     private String titulo;
 
 

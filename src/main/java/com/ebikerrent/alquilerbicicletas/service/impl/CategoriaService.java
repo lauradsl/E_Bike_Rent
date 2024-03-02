@@ -52,7 +52,14 @@ public class CategoriaService implements ICategoriaService {
     @Override
     public CategoriaSalidaDto buscarCategoriaPorId(Long id) {
 
-        return null;
+        Categoria categoriaBuscada = categoriaRepository.findById(id).orElse(null);
+
+        CategoriaSalidaDto categoriaSalidaDto = null;
+        if(categoriaBuscada != null){
+            categoriaSalidaDto = entidadAdtoSalida(categoriaBuscada);
+            LOGGER.info("Categoria encontrada: {}", categoriaSalidaDto);
+        } else LOGGER.error("El id no se encuentra registrado en la base de datos");
+        return categoriaSalidaDto;
     }
 
     @Override

@@ -2,7 +2,9 @@ package com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.CategoriaEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ImagenEntradaDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,12 +28,17 @@ public class ProductoModificacionEntradaDto {
     @NotNull
     @NotBlank
     private String descripcion;
+    @NotNull
+    @NotBlank
+    @JsonProperty("categoria")
+    private String tituloCategoria;
 
+    @JsonIgnore
     @Valid
     private ImagenEntradaDto imagenEntradaDto;
 
-    @Valid
-    private CategoriaEntradaDto categoriaEntradaDto;
+    /*@Valid
+    private CategoriaEntradaDto categoriaEntradaDto;*/
 }
 
 //Los DTOs de modificación (ProductoModificacionEntradaDto) se utilizan específicamente cuando se desea modificar un objeto existente.

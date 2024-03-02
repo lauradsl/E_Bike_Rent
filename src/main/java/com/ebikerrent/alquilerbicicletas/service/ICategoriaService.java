@@ -6,6 +6,7 @@ import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.CategoriaEntradaDt
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.CategoriaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
+import com.ebikerrent.alquilerbicicletas.entity.Categoria;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public interface ICategoriaService {
     CategoriaSalidaDto registrarCategoria(CategoriaEntradaDto categoriaEntradaDto);
 
     CategoriaSalidaDto buscarCategoriaPorId(Long id);
+
 
     void eliminarCategoria(Long id);
 

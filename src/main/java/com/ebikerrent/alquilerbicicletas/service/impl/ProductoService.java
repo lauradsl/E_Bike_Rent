@@ -2,6 +2,7 @@ package com.ebikerrent.alquilerbicicletas.service.impl;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ProductoModificacionEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoEntradaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.producto.CategoriaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Categoria;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
@@ -37,39 +38,28 @@ public class ProductoService implements IProductoService {
             LOGGER.info("Ya existe un producto con el mismo nombre");
             throw new ResourceNotFoundException("Existe un producto con el mismo nombre");
         }
-        LOGGER.info("CATEGORIA ENTRADA: " + productoEntradaDto.getCategoriaE());
-        Categoria categoria = categoriaRepository.findByTitulo(productoEntradaDto.getCategoriaE());
+
+        String categoriaId = productoEntradaDto.getCategoriaString();
+        LOGGER.info("ESTÁ ENTARNDO" + productoEntradaDto.getCategoriaString());
+
+        Categoria categoria = categoriaRepository.findByTitulo(categoriaId);
         if (categoria == null) {
-
-            throw new ResourceNotFoundException("No se encontró la categoría con el título proporcionado. Si es una nueva categoria, debe crearla antes de registrar el producto");
+            throw new ResourceNotFoundException("No se encontró la categoría con el nombre proporcionado: " + categoriaId);
         }
-        LOGGER.info("CATEGORIA ENTRADA DESPUES DEL IF: " + categoria.getTitulo());
+                //.orElseThrow(() -> new ResourceNotFoundException("No se encontró la categoría con el ID proporcionado"));
+        //Mapear DTO de entrada a entidad Producto
+        Producto productRecibido = dtoEntradaAentidad(productoEntradaDto);
+        productRecibido.setCategoria(categoria);
 
-        Producto productoRecibido = dtoEntradaAentidad((productoEntradaDto));
-        productoRecibido.setCategoriaP(categoria.getTitulo());
-        productoRecibido.setCategoriaId(categoria.getId());
-        LOGGER.info("CATEGORIA SETEADA ID: " + productoRecibido.getCategoriaId() + " CATEGORIA NOMBRE " + productoRecibido.getCategoriaP());
-        Producto productoRegistrado = productoRepository.save(productoRecibido);
-        LOGGER.info("CATEGORIA GUARDADA ID: " + productoRegistrado.getCategoriaId() + " CATEGORIA GUARDADA " + productoRegistrado.getCategoriaP());
-        ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(productoRegistrado);
-        LOGGER.info(" CATEGORIA NOMBRE " +productoSalidaDto.getCategoria());
+        //Guardar el producto en la base de datos
+        Producto productoRegistrado = productoRepository.save(productRecibido);
 
-        return productoSalidaDto;
-
-        /*Long capturarCategoria = productoEntradaDto.getCategoriaEntradaDto();
-        Categoria categoria = categoriaRepository.findById(capturarCategoria)
-                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la categoría con el ID proporcionado"));
-
-        Producto productoRecibido = dtoEntradaAentidad(productoEntradaDto);
-        productoRecibido.setCategoriaId(categoria.getId());
-
-
-        LOGGER.info("REVISAR SI ENTRA LA CATEGORIA CORRESPONDIENTE" + productoRecibido);
-        Producto productoRegistrado = productoRepository.save(productoRecibido);
-
+        //Mapear entidad Producto a DTO de salida
         ProductoSalidaDto productoResultado = entidadAdtoSalida(productoRegistrado);
 
-        return productoResultado;*/
+
+        LOGGER.info("PRODUCTO REGISTRADO : " + productoRegistrado);
+        return productoResultado;
     }
 
     @Override
@@ -103,10 +93,21 @@ public class ProductoService implements IProductoService {
 
     @Override
     public ProductoSalidaDto modificarProducto(ProductoModificacionEntradaDto productoModificacionEntradaDto) throws ResourceNotFoundException {
+
+        String categoriaTitulo = productoModificacionEntradaDto.getTituloCategoria();
+
+        Categoria categoria = categoriaRepository.findByTitulo(categoriaTitulo);
+        if (categoria == null) {
+            throw new ResourceNotFoundException("No se encontró la categoría con el nombre proporcionado: " + categoriaTitulo);
+        }
+
         Producto productoAmodificar = dtoModificacioAentidad(productoModificacionEntradaDto);
-        Producto productoPorID = productoRepository.findById(productoAmodificar.getId()).orElse(null);
+        productoAmodificar.setCategoria(categoria);
+
+        Producto productoPorID = buscarProductoPorId(productoAmodificar.getId());
 
         ProductoSalidaDto productoSalidaDtoModificado = null;
+
             if (productoPorID !=null){
                 Producto productoModificado = productoRepository.save(productoAmodificar);
                 productoSalidaDtoModificado = entidadAdtoSalida((productoModificado));
@@ -164,7 +165,7 @@ public class ProductoService implements IProductoService {
         modelMapper.typeMap(ProductoEntradaDto.class, Producto.class)
                 .addMappings(mapper ->
                 {
-                    mapper.map(ProductoEntradaDto:: getImagenEntradaDto, Producto::setImagenes);
+                    mapper.map(ProductoEntradaDto:: getImagenEntradaDtos, Producto::setImagenes);
                     //mapper.map(ProductoEntradaDto:: getCategoriaEntradaDto,Producto::setCategoria);
                 });
 
@@ -173,20 +174,21 @@ public class ProductoService implements IProductoService {
                 .addMappings(mapper ->
                 {
                     mapper.map(Producto::getImagenes,ProductoSalidaDto::setImagenSalidaDto);
-                    //mapper.map(Producto::getCategoria,ProductoSalidaDto::setCategoriaSalidaDto);
+                    mapper.map(Producto::getCategoria,ProductoSalidaDto::setCategoriaSalidaDto);
                 });
 
-        modelMapper.typeMap(ProductoModificacionEntradaDto.class,Producto.class)
-                .addMappings(mapper -> mapper.map(ProductoModificacionEntradaDto::getImagenEntradaDto,Producto::setImagenes));
+        /*modelMapper.typeMap(ProductoModificacionEntradaDto.class,Producto.class)
+                .addMappings(mapper -> mapper.map(ProductoModificacionEntradaDto::getImagenEntradaDto,Producto::setImagenes));*/
 
     }
     public Producto dtoEntradaAentidad(ProductoEntradaDto productoEntradaDto){
+        /*Producto productoEntidad = modelMapper.map(productoEntradaDto, Producto.class);
+        productoEntidad.setCategoria(productoEntradaDto.getCategoriaId());*/
         return modelMapper.map(productoEntradaDto, Producto.class);
     }
 
     public ProductoSalidaDto entidadAdtoSalida(Producto producto){
         return modelMapper.map(producto, ProductoSalidaDto.class);
-
     }
     public Producto dtoSalidaAentidad (ProductoSalidaDto productoSalidaDto){
         return modelMapper.map(productoSalidaDto, Producto.class);

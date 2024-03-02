@@ -97,11 +97,8 @@ public class ImagenService implements IImagenService {
         return modelMapper.map(imagenEntradaDto, Imagen.class);
     }
 
-    //CAMBIO
     public ImagenSalidaDto entidadAdtoSalida(Imagen imagen){
-        ImagenSalidaDto imagenSalidaDto = modelMapper.map(imagen, ImagenSalidaDto.class);
-        //imagenSalidaDto.setProductoId(imagen.getProducto_id1());
-        return imagenSalidaDto;
+        return modelMapper.map(imagen, ImagenSalidaDto.class);
     }
     public Imagen dtoSalidaAentidad (ImagenSalidaDto imagenSalidaDto){
         return modelMapper.map(imagenSalidaDto, Imagen.class);
