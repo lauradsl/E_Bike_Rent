@@ -21,7 +21,7 @@ public class Categoria {
     @Column(name = "TITULO")
     private String titulo;
 
-    @OneToMany(mappedBy = "categoria",fetch = FetchType.LAZY,cascade =CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,cascade =CascadeType.ALL)
     @JsonIgnore
     private Set<Producto> productos=new HashSet<>();
 

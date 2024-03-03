@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ProductoService implements IProductoService {
     private final Logger LOGGER = LoggerFactory.getLogger(ProductoService.class);
@@ -81,9 +83,12 @@ public class ProductoService implements IProductoService {
     @Override
     public void eliminarProducto(Long id) throws ResourceNotFoundException {
 
-    if (buscarProductoPorId(id) != null){
+    Optional<Producto> buscarProducto = productoRepository.findById(id);
+
+    if (buscarProducto != null){
         LOGGER.warn("Se eliminó el producto con el id : " + dtoSalidaAentidad(buscarProductoPorId(id)));
         productoRepository.deleteById(id);
+        throw new ResourceNotFoundException("Se elimino el producto con id: : " + id);
     }else {
         LOGGER.error("No se encontró el producto con el id : " + id);
         throw new ResourceNotFoundException("No se encontró el producto con el id : " + id);
@@ -94,6 +99,9 @@ public class ProductoService implements IProductoService {
     @Override
     public ProductoSalidaDto modificarProducto(ProductoModificacionEntradaDto productoModificacionEntradaDto) throws ResourceNotFoundException {
 
+        LOGGER.info("PRODUCTO A MODIFICAR: " + productoModificacionEntradaDto);  //entra sin imags
+
+
         String categoriaTitulo = productoModificacionEntradaDto.getTituloCategoria();
 
         Categoria categoria = categoriaRepository.findByTitulo(categoriaTitulo);
@@ -101,23 +109,38 @@ public class ProductoService implements IProductoService {
             throw new ResourceNotFoundException("No se encontró la categoría con el nombre proporcionado: " + categoriaTitulo);
         }
 
-        Producto productoAmodificar = dtoModificacioAentidad(productoModificacionEntradaDto);
-        productoAmodificar.setCategoria(categoria);
+        Long buscarProductoId = productoModificacionEntradaDto.getId();
+        Optional<Producto> productoBuscado = productoRepository.findById(buscarProductoId);
+        if (!productoBuscado.isPresent()) {
+            throw new ResourceNotFoundException("No se encontró el producto con el ID proporcionado: " + buscarProductoId);
+        }
+        LOGGER.info("PRODUCTO: " + productoBuscado);
 
-        Producto productoPorID = buscarProductoPorId(productoAmodificar.getId());
+        ProductoSalidaDto productoSalidaDto = null;
 
-        ProductoSalidaDto productoSalidaDtoModificado = null;
+        if(productoBuscado != null){
+            LOGGER.info("PRODUCTO DENTRO DEL IF: " + productoBuscado);
+            Producto productoMap = dtoModificacioAentidad(productoModificacionEntradaDto);
+            productoMap.setCategoria(categoria);
+            LOGGER.info("PRODUCTO MAPEADO: " + productoMap);
+            productoMap.setImagenes(productoBuscado.get().getImagenes());
+            LOGGER.info("PRODUCTO SETEADO: " + productoMap);
 
-            if (productoPorID !=null){
-                Producto productoModificado = productoRepository.save(productoAmodificar);
-                productoSalidaDtoModificado = entidadAdtoSalida((productoModificado));
-                LOGGER.info("Producto Modificado : " + productoModificado);
-            }else {
-                LOGGER.error("El producto no se encontró");
-                throw new ResourceNotFoundException("No fue posible actualizar los datos del producto ");
-            }
+            Producto guardarProducto = productoRepository.save(productoMap);
+            LOGGER.info("PRODUCTO GUARDADO: " + guardarProducto);
 
-        return productoSalidaDtoModificado;
+            productoSalidaDto = entidadAdtoSalida(guardarProducto);
+            LOGGER.info("PRODUCTO SALIDA: " + productoSalidaDto);
+
+            LOGGER.info("El producto " + productoMap + " fue modificado exitosamente ");
+
+        } else {
+            LOGGER.info("El producto " + buscarProductoId + " no fue encontrado.");
+            throw new ResourceNotFoundException("No se ha logrado modificar el paciente con ID: " + productoBuscado);
+        }
+
+        return productoSalidaDto;
+
     }
 
     @Override
@@ -173,12 +196,12 @@ public class ProductoService implements IProductoService {
         modelMapper.typeMap(Producto.class, ProductoSalidaDto.class)
                 .addMappings(mapper ->
                 {
-                    mapper.map(Producto::getImagenes,ProductoSalidaDto::setImagenSalidaDto);
+                    mapper.map(Producto::getImagenes,ProductoSalidaDto::setImagenes);
                     mapper.map(Producto::getCategoria,ProductoSalidaDto::setCategoriaSalidaDto);
                 });
 
         /*modelMapper.typeMap(ProductoModificacionEntradaDto.class,Producto.class)
-                .addMappings(mapper -> mapper.map(ProductoModificacionEntradaDto::getImagenEntradaDto,Producto::setImagenes));*/
+                .addMappings(mapper -> mapper.map(ProductoModificacionEntradaDto::getImagenes,Producto::setImagenes));*/
 
     }
     public Producto dtoEntradaAentidad(ProductoEntradaDto productoEntradaDto){
@@ -195,7 +218,11 @@ public class ProductoService implements IProductoService {
     }
 
     public Producto dtoModificacioAentidad (ProductoModificacionEntradaDto productoModificacionEntradaDto){
+
         return modelMapper.map(productoModificacionEntradaDto,Producto.class);
     }
 
+    public CategoriaSalidaDto entidadCatDtoSalida(Categoria categoria){
+        return modelMapper.map(categoria, CategoriaSalidaDto.class);
+    }
 }

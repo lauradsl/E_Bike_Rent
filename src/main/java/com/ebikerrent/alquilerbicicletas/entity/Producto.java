@@ -29,7 +29,7 @@ public class Producto {
     @JoinColumn(name = "producto_id")
     private Set<Imagen> imagenes = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY) //cascade = CascadeType.ALL
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private Categoria categoria;
 
