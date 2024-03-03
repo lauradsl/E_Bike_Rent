@@ -1,6 +1,7 @@
 package com.ebikerrent.alquilerbicicletas.dto.salida.producto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Column;
 import lombok.*;
 
 @AllArgsConstructor
@@ -11,6 +12,8 @@ import lombok.*;
 public class CategoriaSalidaDto {
     private int id;
     private String titulo;
+    private String descripcion;
+    private String imagen;
 
     /*@JsonProperty("productos")
     private ProductoSalidaDto productoSalidaDto;*/

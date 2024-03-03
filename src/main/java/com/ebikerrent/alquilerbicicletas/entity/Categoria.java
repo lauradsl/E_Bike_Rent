@@ -20,6 +20,11 @@ public class Categoria {
     private Long id;
     @Column(name = "TITULO")
     private String titulo;
+    @Column(name = "descripcion")
+    private String descripcion;
+    @Column(name = "imagen")
+    private String imagen;
+
 
     @OneToMany(fetch = FetchType.LAZY,cascade =CascadeType.ALL)
     @JsonIgnore

@@ -24,23 +24,21 @@ import java.util.Set;
 public class ProductoModificacionEntradaDto {
     @NotNull
     private Long id;
-
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Debe ingresar un nombre")
+    @NotBlank(message = "Debe especificar un nombre")
     private String nombre;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Debe ingresar una descripcion")
+    @NotBlank(message = "Debe especificar una descripcion")
     private String descripcion;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Debe ingresar un titulo de Categoria")
+    @NotBlank(message = "Debe especificar un titulo de Categoria")
     @JsonProperty("categoria")
     private String tituloCategoria;
 
     /*@NotNull
     @Valid
-    private Set<Imagen> imagenes = new HashSet<>();*/
-
-    /*@Valid
+    private Set<Imagen> imagenes = new HashSet<>();
+    @Valid
     private CategoriaEntradaDto categoriaEntradaDto;*/
 }
 

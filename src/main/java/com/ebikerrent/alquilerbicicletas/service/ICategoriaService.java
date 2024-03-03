@@ -7,18 +7,20 @@ import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoEntradaDto
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.CategoriaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Categoria;
+import com.ebikerrent.alquilerbicicletas.exceptions.BadRequestException;
+import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 
 public interface ICategoriaService {
     List<CategoriaSalidaDto> listarCategorias();
-    CategoriaSalidaDto registrarCategoria(CategoriaEntradaDto categoriaEntradaDto);
+    CategoriaSalidaDto registrarCategoria(CategoriaEntradaDto categoriaEntradaDto) throws BadRequestException;
 
     CategoriaSalidaDto buscarCategoriaPorId(Long id);
 
 
-    void eliminarCategoria(Long id);
+    void eliminarCategoria(Long id) throws ResourceNotFoundException;
 
-    CategoriaSalidaDto modificarCategoria (CategoriaModificacionEntradaDto categoriaModificacionEntradaDto);
+    CategoriaSalidaDto modificarCategoria (CategoriaModificacionEntradaDto categoriaModificacionEntradaDto) throws ResourceNotFoundException;
 
 }

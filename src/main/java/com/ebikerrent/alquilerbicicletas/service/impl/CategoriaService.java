@@ -4,6 +4,8 @@ import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.CategoriaModif
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.CategoriaEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.CategoriaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Categoria;
+import com.ebikerrent.alquilerbicicletas.exceptions.BadRequestException;
+import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.repository.CategoriaRepository;
 import com.ebikerrent.alquilerbicicletas.service.ICategoriaService;
 import org.modelmapper.ModelMapper;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoriaService implements ICategoriaService {
@@ -40,13 +43,20 @@ public class CategoriaService implements ICategoriaService {
         return categoriaSalidaDtoList;
     }
 
+
     @Override
-    public CategoriaSalidaDto registrarCategoria(CategoriaEntradaDto categoriaEntradaDto) {
+    public CategoriaSalidaDto registrarCategoria(CategoriaEntradaDto categoriaEntradaDto) throws BadRequestException {
+
+        if (categoriaRepository.findByTitulo(categoriaEntradaDto.getTitulo()) != null) {
+            LOGGER.info("ENTRADA EN EL IF : " + categoriaEntradaDto);
+            LOGGER.info("Ya existe un producto con el mismo nombre");
+            String mensaje = "La categoría con título " + categoriaEntradaDto.getTitulo() + " ya existe";
+            LOGGER.info("Mensaje: " + mensaje);
+            throw new BadRequestException(mensaje);
+        }
         Categoria categoriaRecibida = dtoEntradaAentidad(categoriaEntradaDto);
         Categoria categoriaRegistrada = categoriaRepository.save(categoriaRecibida);
-        CategoriaSalidaDto categoriaResultado = entidadAdtoSalida(categoriaRegistrada);
-        LOGGER.info("Categoria registrada: " + categoriaRegistrada);
-        return categoriaResultado;
+        return entidadAdtoSalida(categoriaRegistrada);
     }
 
     @Override
@@ -63,13 +73,36 @@ public class CategoriaService implements ICategoriaService {
     }
 
     @Override
-    public void eliminarCategoria(Long id) {
+    public void eliminarCategoria(Long id) throws ResourceNotFoundException {  //REVISAR
 
+       Optional<Categoria> buscarCategoria = categoriaRepository.findById(id);
+       if(buscarCategoria != null){
+           categoriaRepository.deleteById(id);
+           LOGGER.warn("Se elimino la categoria con ID: " + id);
+           throw new ResourceNotFoundException("Se elimino la categoria con id:  " + id);
+
+       }else {
+           LOGGER.error("Categoria no encontrado");
+           throw new ResourceNotFoundException("No se ha encontrado la categoria con id " + id);
+       }
     }
 
+
     @Override
-    public CategoriaSalidaDto modificarCategoria(CategoriaModificacionEntradaDto categoriaModificacionEntradaDto) {
-        return null;
+    public CategoriaSalidaDto modificarCategoria(CategoriaModificacionEntradaDto categoriaModificacionEntradaDto) throws ResourceNotFoundException {
+        CategoriaSalidaDto categoriaSalidaDto = null;
+
+        CategoriaSalidaDto buscarCategoria = buscarCategoriaPorId(categoriaModificacionEntradaDto.getId());
+        if(buscarCategoria != null){
+            Categoria categoriaMap = dtoModificadoAentidad(categoriaModificacionEntradaDto);
+            Categoria categoriaGuardada = categoriaRepository.save(categoriaMap);
+            categoriaSalidaDto = entidadAdtoSalida(categoriaGuardada);
+            LOGGER.info("La categoria: " + categoriaModificacionEntradaDto + " se ha modificado exitosamente");
+        } else {
+            LOGGER.info("La categoria con id: " + categoriaModificacionEntradaDto + " no fue encontrada");
+            throw new ResourceNotFoundException("No se logro encontrar la categoria: " + categoriaModificacionEntradaDto);
+        }
+        return categoriaSalidaDto;
     }
 
     public Categoria dtoEntradaAentidad(CategoriaEntradaDto categoriaEntradaDto){
