@@ -17,10 +17,11 @@ import java.util.HashMap;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private MethodArgumentNotValidException exception;
+
     @ExceptionHandler({ResourceNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> manejarResourceNotFound(ResourceNotFoundException resourceNotFoundException) {
-
         Map<String, String> exceptionMessage = new HashMap<>();
         exceptionMessage.put("message", "Resource not found: " + resourceNotFoundException.getMessage());
         return exceptionMessage;
@@ -28,29 +29,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({BadRequestException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> manejarBadRequestException(BadRequestException badRequestException)
-    {
-        Map<String,String> exceptionMessage = new HashMap<>();
-        exceptionMessage.put("message", "Recurso no encontrado: " + badRequestException.getMessage());
+    public Map<String, String> manejarBadRequest(BadRequestException badRequestException) {
+        Map<String, String> exceptionMessage = new HashMap<>();
+        exceptionMessage.put("message", "Bad Request: " + badRequestException.getMessage());
+
         return exceptionMessage;
     }
 
-    /*@ExceptionHandler(DataIntegrityViolationException.class)
+    @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     public String handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        return "Error: El nombre del producto ya existe, por favor intentar con otro nombre";}*/
-
-    @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> procesarValidationException(MethodArgumentNotValidException exception)
-    {
-        Map<String, String> exceptionMessage = new HashMap<>();
-        exception.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            exceptionMessage.put(fieldName, errorMessage);
-        });
-        return exceptionMessage;
-    }
+        return "Error: El nombre del producto ya existe, por favor intentar con otro nombre";}
 }

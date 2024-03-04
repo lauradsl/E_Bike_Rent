@@ -4,6 +4,7 @@ import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.CategoriaModif
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.CategoriaEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.CategoriaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Categoria;
+import com.ebikerrent.alquilerbicicletas.entity.Producto;
 import com.ebikerrent.alquilerbicicletas.exceptions.BadRequestException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.repository.CategoriaRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CategoriaService implements ICategoriaService {
@@ -75,7 +77,22 @@ public class CategoriaService implements ICategoriaService {
     @Override
     public void eliminarCategoria(Long id) throws ResourceNotFoundException {  //REVISAR
 
-       Optional<Categoria> buscarCategoria = categoriaRepository.findById(id);
+
+        Categoria categoria = categoriaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Categoría con ID: " + id + " no fue encontrada"));
+
+        Set<Producto> productos = categoria.getProductos();
+
+        // Verifica si hay productos asociados a la categoría
+        if (!productos.isEmpty()) {
+            throw new ResourceNotFoundException("La categoría está asociada a al menos un producto y no se puede eliminar");
+        }
+
+        // Si no hay productos asociados, procede a eliminar la categoría
+        categoriaRepository.deleteById(id);
+        LOGGER.info("Se eliminó la categoría con ID: " + id);
+
+       /*Optional<Categoria> buscarCategoria = categoriaRepository.findById(id);
        if(buscarCategoria != null){
            categoriaRepository.deleteById(id);
            LOGGER.warn("Se elimino la categoria con ID: " + id);
@@ -83,8 +100,7 @@ public class CategoriaService implements ICategoriaService {
 
        }else {
            LOGGER.error("Categoria no encontrado");
-           throw new ResourceNotFoundException("No se ha encontrado la categoria con id " + id);
-       }
+           throw new ResourceNotFoundException("No se ha encontrado la categoria con id " + id);*/
     }
 
 

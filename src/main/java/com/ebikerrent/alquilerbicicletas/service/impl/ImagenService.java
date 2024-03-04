@@ -6,7 +6,9 @@ import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ImagenSalidaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Imagen;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
+import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.repository.ImagenRepository;
+import com.ebikerrent.alquilerbicicletas.repository.ProductoRepository;
 import com.ebikerrent.alquilerbicicletas.service.IImagenService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -20,10 +22,12 @@ import java.util.List;
 public class ImagenService implements IImagenService {
     private final Logger LOGGER = LoggerFactory.getLogger(ImagenService.class);
     private final ImagenRepository imagenRepository;
+    private final ProductoRepository productoRepository;
     private final ModelMapper modelMapper;
 
-    public ImagenService(ImagenRepository imagenRepository, ModelMapper modelMapper) {
+    public ImagenService(ImagenRepository imagenRepository, ProductoRepository productoRepository, ModelMapper modelMapper) {
         this.imagenRepository = imagenRepository;
+        this.productoRepository = productoRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -42,7 +46,7 @@ public class ImagenService implements IImagenService {
         return imagenSalidaDtoList;
     }
 
-    @Override
+    /*@Override
     public ImagenSalidaDto registrarImagen(ImagenEntradaDto imagenEntradaDto) {
         Imagen imagenRecibida = dtoEntradaAentidad(imagenEntradaDto);
 
@@ -50,7 +54,26 @@ public class ImagenService implements IImagenService {
         ImagenSalidaDto imagenResultado = entidadAdtoSalida(imagenRegistrada);
         LOGGER.info("IMAGEN REGISTRADA: " + imagenRegistrada);
         return imagenResultado;
+    }*/
+
+    @Override
+    public ImagenSalidaDto registrarImagen(ImagenEntradaDto imagenEntradaDto) throws ResourceNotFoundException {
+
+        Producto productoBuscado = productoRepository.findById(imagenEntradaDto.getProducto_id()).orElse(null);
+        if (productoBuscado == null){
+            LOGGER.info("No existe el producto con el id "+ imagenEntradaDto.getProducto_id());
+            throw new ResourceNotFoundException("No existe el producto");
+        }
+        Imagen imagenRecibida = dtoEntradaAentidad(imagenEntradaDto);
+        imagenRecibida.setProducto(productoBuscado);
+
+        Imagen imagenRegistrada = imagenRepository.save((imagenRecibida));
+        productoBuscado.getImagenes().add(imagenRegistrada);
+        ImagenSalidaDto imagenResultado = entidadAdtoSalida(imagenRegistrada);
+        LOGGER.info("IMAGEN REGISTRADA: " + imagenRegistrada);
+        return imagenResultado;
     }
+
 
     @Override
     public ImagenSalidaDto buscarImagenPorId(Long id) {
@@ -67,13 +90,14 @@ public class ImagenService implements IImagenService {
     }
 
     @Override
-    public void eliminarImagen(Long id) {
+    public void eliminarImagen(Long id) throws ResourceNotFoundException {
         if (buscarImagenPorId(id) != null){
             LOGGER.warn("Se eliminó la imagen con el id : " + dtoSalidaAentidad(buscarImagenPorId(id)));
             imagenRepository.deleteById(id);
-        }else
+        }else {
             LOGGER.error("No se encontró la imagen con el id : " + id);
-    }
+            throw new ResourceNotFoundException("No se ha encontrado la imagen con id " + id);
+    }}
 
     @Override
     public ImagenSalidaDto modificarImagen(ImagenModificacionEntradaDto imagenModificacionEntradaDto) {

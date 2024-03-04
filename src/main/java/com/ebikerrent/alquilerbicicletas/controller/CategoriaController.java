@@ -35,7 +35,7 @@ public class CategoriaController {
     }*/
 
     @PostMapping("/registrar")
-    public ResponseEntity<CategoriaSalidaDto> registrarCategoria(@Valid @RequestBody CategoriaEntradaDto categoriaEntradaDto) {
+    public ResponseEntity<CategoriaSalidaDto> registrarCategoria(@Valid @RequestBody CategoriaEntradaDto categoriaEntradaDto) throws BadRequestException {
         try {
             CategoriaSalidaDto categoriaRegistrada = iCategoriaService.registrarCategoria(categoriaEntradaDto);
             return new ResponseEntity<>(categoriaRegistrada, HttpStatus.CREATED);
