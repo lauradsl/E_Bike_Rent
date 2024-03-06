@@ -13,16 +13,16 @@ import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "PRODUCTOS", uniqueConstraints = @UniqueConstraint(columnNames = {"NOMBRE"}))
+@Table(name = "productos", uniqueConstraints = @UniqueConstraint(columnNames = {"nombre"}))
 public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "NOMBRE")
+    @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "DESCRIPCION")
+    @Column(name = "descripcion")
     private String descripcion;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -34,14 +34,7 @@ public class Producto {
     private Categoria categoria;
 
 
-    //cascade = CascadeType.ALL Agregamos la cascada? significaría que las operaciones de persistencia (crear, actualizar, eliminar, buscar) realizadas en un objeto Producto también se deben propagar a las imágenes asociadas
-
-    //HashSet es una implementación de la interfaz Set en Java que representa una colección de elementos únicos sin un orden específico
-    //HashSet contiene elementos únicos y no permite duplicados. La operación de agregar elementos por segunda vez se ignora. No hay un orden de inserción.
-
-
-
-    @Override
+    /*@Override
     public String toString() {
         return "Producto{" +
                 "id=" + id +
@@ -50,5 +43,5 @@ public class Producto {
                 ", imagenes=" + imagenes +
                 ", categoria=" + categoria +
                 '}';
-    }
+    }*/
 }

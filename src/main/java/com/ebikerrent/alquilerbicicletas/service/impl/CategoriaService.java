@@ -6,17 +6,18 @@ import com.ebikerrent.alquilerbicicletas.dto.salida.producto.CategoriaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Categoria;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
 import com.ebikerrent.alquilerbicicletas.exceptions.BadRequestException;
+import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.repository.CategoriaRepository;
 import com.ebikerrent.alquilerbicicletas.service.ICategoriaService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -47,14 +48,10 @@ public class CategoriaService implements ICategoriaService {
 
 
     @Override
-    public CategoriaSalidaDto registrarCategoria(CategoriaEntradaDto categoriaEntradaDto) throws BadRequestException {
+    public CategoriaSalidaDto registrarCategoria(CategoriaEntradaDto categoriaEntradaDto) throws DuplicateEntryException {
 
         if (categoriaRepository.findByTitulo(categoriaEntradaDto.getTitulo()) != null) {
-            LOGGER.info("ENTRADA EN EL IF : " + categoriaEntradaDto);
-            LOGGER.info("Ya existe un producto con el mismo nombre");
-            String mensaje = "La categoría con título " + categoriaEntradaDto.getTitulo() + " ya existe";
-            LOGGER.info("Mensaje: " + mensaje);
-            throw new BadRequestException(mensaje);
+            throw new DuplicateEntryException("La categoría con título " + categoriaEntradaDto.getTitulo() + " ya existe");
         }
         Categoria categoriaRecibida = dtoEntradaAentidad(categoriaEntradaDto);
         Categoria categoriaRegistrada = categoriaRepository.save(categoriaRecibida);
@@ -75,7 +72,7 @@ public class CategoriaService implements ICategoriaService {
     }
 
     @Override
-    public void eliminarCategoria(Long id) throws ResourceNotFoundException {  //REVISAR
+    public void eliminarCategoria(Long id) throws ResourceNotFoundException, DataIntegrityViolationException {  //REVISAR
 
 
         Categoria categoria = categoriaRepository.findById(id)
@@ -85,7 +82,7 @@ public class CategoriaService implements ICategoriaService {
 
         // Verifica si hay productos asociados a la categoría
         if (!productos.isEmpty()) {
-            throw new ResourceNotFoundException("La categoría está asociada a al menos un producto y no se puede eliminar");
+            throw new DataIntegrityViolationException("La categoría está asociada a al menos un producto y no se puede eliminar");
         }
 
         // Si no hay productos asociados, procede a eliminar la categoría

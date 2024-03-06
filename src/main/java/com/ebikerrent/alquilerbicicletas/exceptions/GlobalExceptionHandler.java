@@ -36,9 +36,17 @@ public class GlobalExceptionHandler {
         return exceptionMessage;
     }
 
+    @ExceptionHandler({DuplicateEntryException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> manejarDuplicateEntry(DuplicateEntryException duplicateEntryException) {
+        Map<String, String> exceptionMessage = new HashMap<>();
+        exceptionMessage.put("message", "Duplicate Entry: " + duplicateEntryException.getMessage());
+        return exceptionMessage;
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     public String handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        return "Error: El nombre del producto ya existe, por favor intentar con otro nombre";}
+        return "Mensaje: Error de integridad de datos";}
 }

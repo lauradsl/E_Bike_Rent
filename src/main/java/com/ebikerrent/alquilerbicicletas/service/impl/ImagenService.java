@@ -100,7 +100,7 @@ public class ImagenService implements IImagenService {
     }}
 
     @Override
-    public ImagenSalidaDto modificarImagen(ImagenModificacionEntradaDto imagenModificacionEntradaDto) {
+    public ImagenSalidaDto modificarImagen(ImagenModificacionEntradaDto imagenModificacionEntradaDto) throws ResourceNotFoundException {
         Imagen imagenAmodificar = dtoModificacioAentidad(imagenModificacionEntradaDto);
         Imagen imagenPorID = imagenRepository.findById(imagenAmodificar.getId()).orElse(null);
 
@@ -111,8 +111,7 @@ public class ImagenService implements IImagenService {
             LOGGER.info("Imagen Modificado : " + imagenModificado);
         }else
             LOGGER.error("La imagen no se encontró");
-
-        return imagenSalidaDtoModificado;
+            throw new ResourceNotFoundException("No se ha encontrado la imagen con id " + imagenModificacionEntradaDto.getId());
     }
 
 

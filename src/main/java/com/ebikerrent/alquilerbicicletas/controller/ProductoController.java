@@ -3,6 +3,7 @@ package com.ebikerrent.alquilerbicicletas.controller;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ProductoModificacionEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
+import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.service.IProductoService;
 import jakarta.validation.Valid;
@@ -26,7 +27,7 @@ public class ProductoController {
 
 
     @PostMapping("/registrar")
-    public ResponseEntity<ProductoSalidaDto> registrarProducto(@Valid @RequestBody ProductoEntradaDto productoEntradaDto) throws ResourceNotFoundException {
+    public ResponseEntity<ProductoSalidaDto> registrarProducto(@Valid @RequestBody ProductoEntradaDto productoEntradaDto) throws ResourceNotFoundException, DuplicateEntryException {
         return new ResponseEntity<>(iProductoService.registrarProducto(productoEntradaDto) ,HttpStatus.CREATED);
     }
 

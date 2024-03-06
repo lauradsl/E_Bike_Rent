@@ -12,5 +12,5 @@ public interface IImagenService {
     ImagenSalidaDto registrarImagen(ImagenEntradaDto imagenEntradaDto) throws ResourceNotFoundException;
     ImagenSalidaDto buscarImagenPorId(Long id);
     void eliminarImagen(Long id) throws ResourceNotFoundException;
-    ImagenSalidaDto modificarImagen(ImagenModificacionEntradaDto imagenModificacionEntradaDto);
+    ImagenSalidaDto modificarImagen(ImagenModificacionEntradaDto imagenModificacionEntradaDto) throws ResourceNotFoundException;
 }

@@ -6,6 +6,7 @@ import com.ebikerrent.alquilerbicicletas.dto.salida.producto.CategoriaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Categoria;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
+import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.repository.CategoriaRepository;
 import com.ebikerrent.alquilerbicicletas.repository.ProductoRepository;
@@ -34,11 +35,11 @@ public class ProductoService implements IProductoService {
     }
 
     @Override
-    public ProductoSalidaDto registrarProducto(ProductoEntradaDto productoEntradaDto) throws ResourceNotFoundException {
+    public ProductoSalidaDto registrarProducto(ProductoEntradaDto productoEntradaDto) throws ResourceNotFoundException, DuplicateEntryException {
 
         if (productoRepository.findByNombre(productoEntradaDto.getNombre()) != null) {
             LOGGER.info("Ya existe un producto con el mismo nombre");
-            throw new ResourceNotFoundException("Existe un producto con el mismo nombre");
+            throw new DuplicateEntryException("Existe un producto con el mismo nombre");
         }
 
         String categoriaId = productoEntradaDto.getCategoriaString();
@@ -48,7 +49,7 @@ public class ProductoService implements IProductoService {
         if (categoria == null) {
             throw new ResourceNotFoundException("No se encontró la categoría con el nombre proporcionado: " + categoriaId);
         }
-                //.orElseThrow(() -> new ResourceNotFoundException("No se encontró la categoría con el ID proporcionado"));
+
         //Mapear DTO de entrada a entidad Producto
         Producto productRecibido = dtoEntradaAentidad(productoEntradaDto);
         productRecibido.setCategoria(categoria);
@@ -74,7 +75,7 @@ public class ProductoService implements IProductoService {
             LOGGER.info("Producto encontrado : " + productoBuscado);
         }else {
             LOGGER.error("El id del producto no se encuentra en la base de datos");
-            throw new ResourceNotFoundException("No se encontró el producto en la base de datos");
+            throw new ResourceNotFoundException("En la base de datos no se encontro el producto con Id: " + id);
         }
 
        return productoEncontrado;
@@ -86,9 +87,9 @@ public class ProductoService implements IProductoService {
     Optional<Producto> buscarProducto = productoRepository.findById(id);
 
     if (buscarProducto != null){
-        LOGGER.warn("Se eliminó el producto con el id : " + dtoSalidaAentidad(buscarProductoPorId(id)));
         productoRepository.deleteById(id);
-        throw new ResourceNotFoundException("Se elimino el producto con id: : " + id);
+        LOGGER.warn("Se eliminó el producto con el id : " + dtoSalidaAentidad(buscarProductoPorId(id)));
+
     }else {
         LOGGER.error("No se encontró el producto con el id : " + id);
         throw new ResourceNotFoundException("No se encontró el producto con el id : " + id);
@@ -136,7 +137,7 @@ public class ProductoService implements IProductoService {
 
         } else {
             LOGGER.info("El producto " + buscarProductoId + " no fue encontrado.");
-            throw new ResourceNotFoundException("No se ha logrado modificar el paciente con ID: " + productoBuscado);
+            throw new ResourceNotFoundException("El producto: " + productoBuscado + "  no fue encontrado.");
         }
 
         return productoSalidaDto;

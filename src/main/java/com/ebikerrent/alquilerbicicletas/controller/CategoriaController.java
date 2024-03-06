@@ -4,12 +4,14 @@ import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.CategoriaModif
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.CategoriaEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.CategoriaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.exceptions.BadRequestException;
+import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.service.ICategoriaService;
 import com.ebikerrent.alquilerbicicletas.service.impl.ProductoService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,21 +30,10 @@ public class CategoriaController {
         this.iCategoriaService = iCategoriaService;
     }
 
-    /*@PostMapping("/registrar")
-    public ResponseEntity<CategoriaSalidaDto> registrarCategoria(@Valid @RequestBody CategoriaEntradaDto categoriaEntradaDto) throws BadRequestException
+    @PostMapping("/registrar")
+    public ResponseEntity<CategoriaSalidaDto> registrarCategoria(@Valid @RequestBody CategoriaEntradaDto categoriaEntradaDto) throws DuplicateEntryException, DataIntegrityViolationException
     {
         return new ResponseEntity<>(iCategoriaService.registrarCategoria(categoriaEntradaDto) , HttpStatus.CREATED);
-    }*/
-
-    @PostMapping("/registrar")
-    public ResponseEntity<CategoriaSalidaDto> registrarCategoria(@Valid @RequestBody CategoriaEntradaDto categoriaEntradaDto) throws BadRequestException {
-        try {
-            CategoriaSalidaDto categoriaRegistrada = iCategoriaService.registrarCategoria(categoriaEntradaDto);
-            return new ResponseEntity<>(categoriaRegistrada, HttpStatus.CREATED);
-        } catch (BadRequestException e) {
-            LOGGER.error("Se produjo una excepción BadRequestException: " + e.getMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
     }
 
 
