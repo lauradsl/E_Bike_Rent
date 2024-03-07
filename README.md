@@ -2,7 +2,7 @@
 Proyecto Integrador. Modificaciones realizadas por Laura Salamanca.
 
 ### DOCUMENTACION: 
-1. Se agrega *E_Bikerent.postman_collection*
+1. se adjunta la colección de Postman en: *E_Bikerent.postman_collection*
 
 ### ENTIDAD PRODUCTO:
 1. REGISTRAR: para registrar el Producto la Categoria ya debe estar creada. Si se desea registrar un Producto con una nueva Categoria, esta  debe ser creada previamente --> para el registro del Producto se debe usar el nombre de la Categoria.
