@@ -1,6 +1,5 @@
 package com.ebikerrent.alquilerbicicletas.dto.salida.producto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @AllArgsConstructor

@@ -34,7 +34,7 @@ public class ProductoEntradaDto {
     @JsonProperty("imagenes")
     private Set<ImagenEntradaDto> imagenEntradaDtos = new HashSet<>();
 
-    @NotNull(message = "El ID de la categoría no puede ser nulo")
+    @NotNull(message = "El nombre de la categoría no puede ser nulo")
     @JsonProperty("categoria")
     private String categoriaString;
     //private Long categoriaId;

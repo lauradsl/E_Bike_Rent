@@ -87,9 +87,8 @@ public class ProductoService implements IProductoService {
     Optional<Producto> buscarProducto = productoRepository.findById(id);
 
     if (buscarProducto != null){
-        productoRepository.deleteById(id);
         LOGGER.warn("Se eliminó el producto con el id : " + dtoSalidaAentidad(buscarProductoPorId(id)));
-
+        productoRepository.deleteById(id);
     }else {
         LOGGER.error("No se encontró el producto con el id : " + id);
         throw new ResourceNotFoundException("No se encontró el producto con el id : " + id);

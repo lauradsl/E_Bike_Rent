@@ -46,15 +46,6 @@ public class ImagenService implements IImagenService {
         return imagenSalidaDtoList;
     }
 
-    /*@Override
-    public ImagenSalidaDto registrarImagen(ImagenEntradaDto imagenEntradaDto) {
-        Imagen imagenRecibida = dtoEntradaAentidad(imagenEntradaDto);
-
-        Imagen imagenRegistrada = imagenRepository.save((imagenRecibida));
-        ImagenSalidaDto imagenResultado = entidadAdtoSalida(imagenRegistrada);
-        LOGGER.info("IMAGEN REGISTRADA: " + imagenRegistrada);
-        return imagenResultado;
-    }*/
 
     @Override
     public ImagenSalidaDto registrarImagen(ImagenEntradaDto imagenEntradaDto) throws ResourceNotFoundException {
@@ -111,7 +102,9 @@ public class ImagenService implements IImagenService {
             LOGGER.info("Imagen Modificado : " + imagenModificado);
         }else
             LOGGER.error("La imagen no se encontró");
-            throw new ResourceNotFoundException("No se ha encontrado la imagen con id " + imagenModificacionEntradaDto.getId());
+
+
+            return imagenSalidaDtoModificado;
     }
 
 

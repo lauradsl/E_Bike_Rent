@@ -1,0 +1,281 @@
+{
+	"info": {
+		"_postman_id": "c4ae0bca-2c02-4edc-a306-50e058b22558",
+		"name": "E_Bikerent",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26643448"
+	},
+	"item": [
+		{
+			"name": "Producto",
+			"item": [
+				{
+					"name": "Registrar producto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n    {\r\n        \"nombre\": \"Bicicleta2,\",\r\n        \"descripcion\": \"Veloz y liviana\",\r\n        \"categoria\" : \"Montaña\",\r\n        \"imagenes\": [\r\n            {\r\n                \"titulo\": \"Imagen1 de Bicileta1\",\r\n                \"urlImg\": \"www\"\r\n            },\r\n            {\r\n                \"titulo\": \"Imagen2 de Bicicleta1\",\r\n                \"urlImg\": \"www.2\"\r\n            }\r\n        ]\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/productos/registrar",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar producto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : 2,\r\n    \"nombre\": \"BicicletaPODEROSA3\",\r\n    \"descripcion\": \"Veloz y liviana\",\r\n    \"categoria\" : \"Urbana\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/productos/modificar",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos",
+								"modificar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar productos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/productos/listar",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos",
+								"listar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar producto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/productos/eliminar/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos",
+								"eliminar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Imagenes",
+			"item": [
+				{
+					"name": "Registrar imagen",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n    {\r\n        \"titulo\": \"Imagen1 de BiciletaVoladora\",\r\n        \"urlImg\": \"www\"\r\n    }\r\n   ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/imagen/registrar",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"imagen",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar imagenes",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar imagen",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8082/imagen/modificar",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"imagen",
+								"modificar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar imagen",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/imagen/eliminar/7",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"imagen",
+								"eliminar",
+								"7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categoria",
+			"item": [
+				{
+					"name": "Registrar categoria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\": \"Carga\",\r\n    \"descripcion\": \"Bicileta de carga\",\r\n    \"imagen\" : \"www.categoriaCarga.com\"\r\n}\r\nNO SE DEBEN REGISTRAR DOS CATEGORIAS IGUALES. REVISAR\r\nUrbana\r\nPlegable\r\nMontaña\r\nCarretera\r\nCarga\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/categorias/registrar",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categorias",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar categorias",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/categorias/listar",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categorias",
+								"listar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar categoria",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/categorias/modificar",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categorias",
+								"modificar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar categoria",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/categorias/eliminar/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categorias",
+								"eliminar",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
