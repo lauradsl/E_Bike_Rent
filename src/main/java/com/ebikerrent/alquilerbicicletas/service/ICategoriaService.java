@@ -18,7 +18,7 @@ public interface ICategoriaService {
     List<CategoriaSalidaDto> listarCategorias();
     CategoriaSalidaDto registrarCategoria(CategoriaEntradaDto categoriaEntradaDto) throws DuplicateEntryException;
 
-    CategoriaSalidaDto buscarCategoriaPorId(Long id);
+    CategoriaSalidaDto buscarCategoriaPorId(Long id) throws ResourceNotFoundException;
 
 
     void eliminarCategoria(Long id) throws ResourceNotFoundException, DataIntegrityViolationException;

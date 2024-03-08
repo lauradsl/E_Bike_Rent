@@ -75,7 +75,7 @@ public class ProductoService implements IProductoService {
             LOGGER.info("Producto encontrado : " + productoBuscado);
         }else {
             LOGGER.error("El id del producto no se encuentra en la base de datos");
-            throw new ResourceNotFoundException("En la base de datos no se encontro el producto con Id: " + id);
+            throw new ResourceNotFoundException("En la base de datos no se encontro el producto con ID: " + id);
         }
 
        return productoEncontrado;
@@ -110,6 +110,7 @@ public class ProductoService implements IProductoService {
         }
 
         Long buscarProductoId = productoModificacionEntradaDto.getId();
+
         Optional<Producto> productoBuscado = productoRepository.findById(buscarProductoId);
         if (!productoBuscado.isPresent()) {
             throw new ResourceNotFoundException("No se encontró el producto con el ID proporcionado: " + buscarProductoId);

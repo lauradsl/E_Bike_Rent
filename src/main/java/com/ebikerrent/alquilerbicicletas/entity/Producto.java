@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @Setter
 @Getter
-
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "productos", uniqueConstraints = @UniqueConstraint(columnNames = {"nombre"}))

@@ -57,7 +57,7 @@ public class CategoriaService implements ICategoriaService {
     }
 
     @Override
-    public CategoriaSalidaDto buscarCategoriaPorId(Long id) {
+    public CategoriaSalidaDto buscarCategoriaPorId(Long id) throws ResourceNotFoundException {
 
         Categoria categoriaBuscada = categoriaRepository.findById(id).orElse(null);
 
@@ -65,7 +65,11 @@ public class CategoriaService implements ICategoriaService {
         if (categoriaBuscada != null) {
             categoriaSalidaDto = entidadAdtoSalida(categoriaBuscada);
             LOGGER.info("Categoria encontrada: {}", categoriaSalidaDto);
-        } else LOGGER.error("El id no se encuentra registrado en la base de datos");
+        } else {
+            LOGGER.error("El id no se encuentra registrado en la base de datos");
+            throw new ResourceNotFoundException("En la base de datos no se encontro la categoria con ID: " + id);
+        }
+
         return categoriaSalidaDto;
     }
 

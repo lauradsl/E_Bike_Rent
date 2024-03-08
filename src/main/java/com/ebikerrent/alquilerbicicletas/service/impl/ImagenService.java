@@ -17,17 +17,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ImagenService implements IImagenService {
     private final Logger LOGGER = LoggerFactory.getLogger(ImagenService.class);
     private final ImagenRepository imagenRepository;
     private final ProductoRepository productoRepository;
+    private final ProductoService productoService;
     private final ModelMapper modelMapper;
 
-    public ImagenService(ImagenRepository imagenRepository, ProductoRepository productoRepository, ModelMapper modelMapper) {
+    public ImagenService(ImagenRepository imagenRepository, ProductoRepository productoRepository, ProductoService productoService, ModelMapper modelMapper) {
         this.imagenRepository = imagenRepository;
         this.productoRepository = productoRepository;
+        this.productoService = productoService;
         this.modelMapper = modelMapper;
     }
 
@@ -67,16 +70,17 @@ public class ImagenService implements IImagenService {
 
 
     @Override
-    public ImagenSalidaDto buscarImagenPorId(Long id) {
+    public ImagenSalidaDto buscarImagenPorId(Long id) throws ResourceNotFoundException {
         Imagen imagenBuscado = imagenRepository.findById(id).orElse(null);
 
         ImagenSalidaDto imagenEncontrado = null;
         if (imagenBuscado != null){
             imagenEncontrado = entidadAdtoSalida(imagenBuscado);
             LOGGER.info("Imagen encontrado : " + imagenBuscado);
-        }else
+        }else {
             LOGGER.error("El id de la imagen no se encuentra en la base de datos");
-
+            throw new ResourceNotFoundException("En la base de datos no se encontro la imagen con ID: " + id);
+        }
         return imagenEncontrado;
     }
 
@@ -104,8 +108,58 @@ public class ImagenService implements IImagenService {
             LOGGER.error("La imagen no se encontró");
 
 
-            return imagenSalidaDtoModificado;
+        return imagenSalidaDtoModificado;
     }
+
+    /*@Override
+    public ImagenSalidaDto modificarImagen(ImagenModificacionEntradaDto imagenModificacionEntradaDto) throws ResourceNotFoundException {
+
+        if(!imagenRepository.findById(imagenModificacionEntradaDto.getId()).isPresent()){
+            LOGGER.info("No existe la imagen con id: " + imagenModificacionEntradaDto.getId());
+            throw new ResourceNotFoundException("No se encontro imagen con id: " + imagenModificacionEntradaDto.getId());
+        }
+
+        Long imagenId = imagenModificacionEntradaDto.getId();
+
+        Imagen imagenAmodificar = dtoModificacioAentidad(imagenModificacionEntradaDto);
+        LOGGER.info("IMAGEN A ENTIDAD: " + imagenAmodificar);
+        Imagen imagenModificada = imagenRepository.save(imagenAmodificar);
+
+        List<ProductoSalidaDto> listaProductos = productoService.listarProductos();
+        LOGGER.info("LISTA PRODUCTO: " + listaProductos);
+        //necesito recorrer esta lista para buscar el producto asociado a IMAGEN
+
+        Producto productoAsociado = null;
+        for (ProductoSalidaDto productoSalidaDto : listaProductos){
+            LOGGER.info("PRODUCTO FOR1: " + listaProductos);
+
+
+            Producto producto = productoRepository.findById(productoSalidaDto.getId()).orElse(null);
+
+            LOGGER.info("PRODUCTO FOR2: " + producto);
+
+            if (producto.getImagenes().stream().anyMatch(imagen -> imagen.getId().equals(imagenId))) {
+                        productoAsociado = producto;
+                        LOGGER.info("RESULTADO IF: " + productoAsociado);
+                    }
+        }
+        //productoAsociado = productoRepository.findByImagenes(imagenModificada);
+        LOGGER.info("IMAGEN MODIFICADA: " + imagenModificada);
+        LOGGER.info("PRODUCTO ASOCIADO: " + imagenModificada);
+
+        Set<Imagen> imagenesProducto = productoAsociado.getImagenes();
+        LOGGER.info("IMAGENES PRODUCTO: " + imagenesProducto);
+        imagenesProducto.add(imagenModificada);
+        productoAsociado.setImagenes(imagenesProducto);
+        LOGGER.info("PRODUCTO ASOCIADO: " + productoAsociado);
+
+        productoRepository.save(productoAsociado);
+        LOGGER.info("Imagen agregada al producto: " + productoAsociado);
+
+        ImagenSalidaDto imagenSalidaDto = entidadAdtoSalida(imagenModificada);
+
+        return imagenSalidaDto;
+    }*/
 
 
 

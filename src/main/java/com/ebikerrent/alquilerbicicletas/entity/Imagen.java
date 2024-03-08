@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString
+
 @Table(name = "imagenes")
 public class Imagen {
     @Id
