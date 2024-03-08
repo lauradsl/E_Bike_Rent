@@ -10,7 +10,6 @@ import java.util.Set;
 @Entity
 @Setter
 @Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "productos", uniqueConstraints = @UniqueConstraint(columnNames = {"nombre"}))
@@ -33,15 +32,4 @@ public class Producto {
     @JoinColumn(name = "categoria_id", referencedColumnName = "id")
     private Categoria categoria;
 
-
-    /*@Override
-    public String toString() {
-        return "Producto{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", imagenes=" + imagenes +
-                ", categoria=" + categoria +
-                '}';
-    }*/
 }

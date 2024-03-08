@@ -6,9 +6,9 @@ import lombok.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Setter
 @Getter
-
 @Table(name = "imagenes")
 public class Imagen {
     @Id
@@ -25,14 +25,5 @@ public class Imagen {
     @JoinColumn(name = "producto_id", referencedColumnName = "id")
     private Producto producto;
 
-    /*@Override
-    public String toString() {
-        return "Imagen{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", urlImg='" + urlImg + '\'' +
-                ", producto=" + producto +
-                '}';
-    }*/
 }
 

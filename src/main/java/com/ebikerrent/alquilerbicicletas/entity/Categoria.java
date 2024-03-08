@@ -10,9 +10,9 @@ import java.util.Set;
 @Entity
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Table(name = "categorias")
 public class Categoria {
     @Id
@@ -31,15 +31,5 @@ public class Categoria {
     @JsonIgnore
     private Set<Producto> productos = new HashSet<>();
 
-    /*@Override
-    public String toString() {
-        return "Categoria{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", imagen='" + imagen + '\'' +
-                ", productos=" + productos +
-                '}';
-    }*/
 }
 
