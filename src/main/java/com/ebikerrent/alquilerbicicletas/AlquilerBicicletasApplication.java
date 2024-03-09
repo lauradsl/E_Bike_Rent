@@ -19,7 +19,10 @@ public class AlquilerBicicletasApplication {
 	public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
 		SpringApplication.run(AlquilerBicicletasApplication.class, args) ;
-		LOGGER.info("eBikeRent ejecutándose...");
+		LOGGER.info("---eBikeRent EJECUTANDOSE---");
+		LOGGER.info("---eBikeRent EJECUTANDOSE---");
+		LOGGER.info("---eBikeRent EJECUTANDOSE---");
+		LOGGER.info("---eBikeRent EJECUTANDOSE---");
 	}
 	@Bean
 	public ModelMapper modelMapper(){

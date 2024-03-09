@@ -1,6 +1,8 @@
 package com.ebikerrent.alquilerbicicletas.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Entity
@@ -13,18 +15,24 @@ import lombok.*;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "usuario_id")
     private Long id;
-
+    @Column(name="NOMBRE")
+    @NotNull
+    @Size(min = 1, max = 250)
     private String nombre;
-
+    @Column(name="APELLIDO")
+    @NotNull
+    @Size(min = 1, max = 250)
     private String apellido;
-
-    private String email;
-
+    @Column(name="EMAIL",unique = true)
+    @NotNull
+    @Size(min = 1, max = 250)
+    private String mail;
+    @Column(name="password")
+    @NotNull
+    @Size(min = 1, max = 250)
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Tipo_Usuario tipo_usuario;
+    private boolean esAdmin;
 
 }
