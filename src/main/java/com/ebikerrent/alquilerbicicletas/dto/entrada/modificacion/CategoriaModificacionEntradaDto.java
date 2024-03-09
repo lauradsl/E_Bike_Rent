@@ -1,5 +1,6 @@
 package com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion;
 
+import com.ebikerrent.alquilerbicicletas.dto.salida.CaracteristicaSalidaDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,4 +30,5 @@ public class CategoriaModificacionEntradaDto {
     @NotNull(message = "Debe ingresar una imagen")
     @NotBlank(message = "Este campo no puede estar vacio")
     private String imagen;
+
 }

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Transient;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -34,13 +35,12 @@ public class ProductoModificacionEntradaDto {
     @NotBlank(message = "Debe especificar un titulo de Categoria")
     @JsonProperty("categoria")
     private String tituloCategoria;
+    //@NotNull(message = "Debe ingresar una caracteristica")
+    //@NotBlank(message = "Debe especificar una caracteristica")
+    @NotEmpty
+    @JsonProperty("caracteristicas")
+    private Set<String> caracteristicas = new HashSet<>();
 
-    /*@NotNull
-    @Valid
-    private Set<Imagen> imagenes = new HashSet<>();
-    @Valid
-    private CategoriaEntradaDto categoriaEntradaDto;*/
 }
 
-//Los DTOs de modificación (ProductoModificacionEntradaDto) se utilizan específicamente cuando se desea modificar un objeto existente.
-//Pueden contener solo los campos que se permiten modificar y son diferentes de los DTOs de entrada y salida.
+

@@ -2,7 +2,7 @@ package com.ebikerrent.alquilerbicicletas.service.impl;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.CategoriaModificacionEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.CategoriaEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.producto.CategoriaSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.CategoriaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Categoria;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
 import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;

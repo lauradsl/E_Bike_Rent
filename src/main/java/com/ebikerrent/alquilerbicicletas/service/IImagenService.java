@@ -2,7 +2,7 @@ package com.ebikerrent.alquilerbicicletas.service;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ImagenModificacionEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ImagenEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ImagenSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.ImagenSalidaDto;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 
 import java.util.List;

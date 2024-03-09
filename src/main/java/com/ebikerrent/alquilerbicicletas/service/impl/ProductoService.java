@@ -2,12 +2,14 @@ package com.ebikerrent.alquilerbicicletas.service.impl;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ProductoModificacionEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.producto.CategoriaSalidaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.CategoriaSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.ProductoSalidaDto;
+import com.ebikerrent.alquilerbicicletas.entity.Caracteristica;
 import com.ebikerrent.alquilerbicicletas.entity.Categoria;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
 import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
+import com.ebikerrent.alquilerbicicletas.repository.CaracteristicaRepository;
 import com.ebikerrent.alquilerbicicletas.repository.CategoriaRepository;
 import com.ebikerrent.alquilerbicicletas.repository.ProductoRepository;
 import com.ebikerrent.alquilerbicicletas.service.IProductoService;
@@ -16,9 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductoService implements IProductoService {
@@ -26,11 +26,13 @@ public class ProductoService implements IProductoService {
     private final ProductoRepository productoRepository;
     private final ModelMapper modelMapper;
     private final CategoriaRepository categoriaRepository;
+    private final CaracteristicaRepository caracteristicaRepository;
 
-    public ProductoService(ProductoRepository productoRepository, ModelMapper modelMapper, CategoriaRepository categoriaRepository) {
+    public ProductoService(ProductoRepository productoRepository, ModelMapper modelMapper, CategoriaRepository categoriaRepository, CaracteristicaRepository caracteristicaRepository) {
         this.productoRepository = productoRepository;
         this.modelMapper = modelMapper;
         this.categoriaRepository = categoriaRepository;
+        this.caracteristicaRepository = caracteristicaRepository;
         configuracionMapper();
     }
 
@@ -44,24 +46,30 @@ public class ProductoService implements IProductoService {
 
         String categoriaId = productoEntradaDto.getCategoriaString();
         LOGGER.info("ESTÁ ENTARNDO" + productoEntradaDto.getCategoriaString());
-
         Categoria categoria = categoriaRepository.findByTitulo(categoriaId);
         if (categoria == null) {
             throw new ResourceNotFoundException("No se encontró la categoría con el nombre proporcionado: " + categoriaId);
         }
 
-        //Mapear DTO de entrada a entidad Producto
+        Set<Caracteristica> caracteristicasList = new HashSet<>();
+        Set<String> arrayDeCaracteristicas = productoEntradaDto.getCaracteristica_nombre();
+        for (String caracteristica : arrayDeCaracteristicas){
+            Caracteristica caracteristicaBuscada = caracteristicaRepository.findByNombre(caracteristica);
+            if (caracteristicaBuscada == null){
+                LOGGER.error("No se encontró la caracteristica buscada");
+                throw new ResourceNotFoundException("No se encontró la caracteristica en la base de datos: " + caracteristica);
+            }
+            caracteristicasList.add(caracteristicaBuscada);
+        }
+
         Producto productRecibido = dtoEntradaAentidad(productoEntradaDto);
         productRecibido.setCategoria(categoria);
+        productRecibido.setCaracteristicas(caracteristicasList);
 
-        //Guardar el producto en la base de datos
-        Producto productoRegistrado = productoRepository.save(productRecibido);
-
-        //Mapear entidad Producto a DTO de salida
+        Producto productoRegistrado = productoRepository.save((productRecibido));
         ProductoSalidaDto productoResultado = entidadAdtoSalida(productoRegistrado);
-
-
         LOGGER.info("PRODUCTO REGISTRADO : " + productoRegistrado);
+        LOGGER.info("PRODUCTO SALIDA DTO : " + productoResultado);
         return productoResultado;
     }
 
@@ -77,7 +85,6 @@ public class ProductoService implements IProductoService {
             LOGGER.error("El id del producto no se encuentra en la base de datos");
             throw new ResourceNotFoundException("En la base de datos no se encontro el producto con ID: " + id);
         }
-
        return productoEncontrado;
     }
 
@@ -93,36 +100,41 @@ public class ProductoService implements IProductoService {
         LOGGER.error("No se encontró el producto con el id : " + id);
         throw new ResourceNotFoundException("No se encontró el producto con el id : " + id);
     }
-
     }
 
     @Override
     public ProductoSalidaDto modificarProducto(ProductoModificacionEntradaDto productoModificacionEntradaDto) throws ResourceNotFoundException {
 
         LOGGER.info("PRODUCTO A MODIFICAR: " + productoModificacionEntradaDto);  //entra sin imags
-
-
-        String categoriaTitulo = productoModificacionEntradaDto.getTituloCategoria();
-
-        Categoria categoria = categoriaRepository.findByTitulo(categoriaTitulo);
-        if (categoria == null) {
-            throw new ResourceNotFoundException("No se encontró la categoría con el nombre proporcionado: " + categoriaTitulo);
-        }
-
         Long buscarProductoId = productoModificacionEntradaDto.getId();
-
         Optional<Producto> productoBuscado = productoRepository.findById(buscarProductoId);
         if (!productoBuscado.isPresent()) {
             throw new ResourceNotFoundException("No se encontró el producto con el ID proporcionado: " + buscarProductoId);
         }
         LOGGER.info("PRODUCTO: " + productoBuscado);
 
+        String categoriaTitulo = productoModificacionEntradaDto.getTituloCategoria();
+        Categoria categoria = categoriaRepository.findByTitulo(categoriaTitulo);
+        if (categoria == null) {
+            throw new ResourceNotFoundException("No se encontró la categoría con el nombre proporcionado: " + categoriaTitulo);
+        }
+
+        Set<Caracteristica> caracteristicasList = new HashSet<>();
+        Set<String> arrayDeCaracteristicas = productoModificacionEntradaDto.getCaracteristicas();
+        for (String caracteristica : arrayDeCaracteristicas) {
+            Caracteristica caracteristicaBuscada = caracteristicaRepository.findByNombre(caracteristica);
+            if (caracteristicaBuscada == null) {
+                LOGGER.error("No se encontró la caracteristica buscada");
+                throw new ResourceNotFoundException("No se encontró la caracteristica en la base de datos: " + caracteristica);
+            } caracteristicasList.add(caracteristicaBuscada);
+        }
         ProductoSalidaDto productoSalidaDto = null;
 
         if(productoBuscado != null){
             LOGGER.info("PRODUCTO DENTRO DEL IF: " + productoBuscado);
             Producto productoMap = dtoModificacioAentidad(productoModificacionEntradaDto);
             productoMap.setCategoria(categoria);
+            productoMap.setCaracteristicas(caracteristicasList);
             LOGGER.info("PRODUCTO MAPEADO: " + productoMap);
             productoMap.setImagenes(productoBuscado.get().getImagenes());
             LOGGER.info("PRODUCTO SETEADO: " + productoMap);
@@ -134,14 +146,11 @@ public class ProductoService implements IProductoService {
             LOGGER.info("PRODUCTO SALIDA: " + productoSalidaDto);
 
             LOGGER.info("El producto " + productoMap + " fue modificado exitosamente ");
-
         } else {
             LOGGER.info("El producto " + buscarProductoId + " no fue encontrado.");
             throw new ResourceNotFoundException("El producto: " + productoBuscado + "  no fue encontrado.");
         }
-
         return productoSalidaDto;
-
     }
 
     @Override
@@ -157,7 +166,6 @@ public class ProductoService implements IProductoService {
             LOGGER.info("No se encontró el producto con el nombre : " + nombreProducto);
             throw new ResourceNotFoundException("No se encontró el producto con el nombre : " + nombreProducto);
         }
-
         return productoEncontrado;
     }
 
@@ -170,21 +178,15 @@ public class ProductoService implements IProductoService {
 
 
         List<ProductoSalidaDto> productoSalidaDtoList= new ArrayList<>();
-
         for (Producto p: productos){
-
             ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(p);
             productoSalidaDtoList.add(productoSalidaDto);
         }
         LOGGER.info("Listado de todos los productos : " + productos);
-
         return productoSalidaDtoList;
     }
 
 
-    //El método configuracionMapper está utilizando la biblioteca ModelMapper para definir cómo deben realizarse
-    //los mapeos entre tres clases relacionadas: ProductoEntradaDto, Producto, y ProductoModificacionEntradaDto.
-    //Estos mapeos están específicamente centrados en la propiedad imagen.
     private void configuracionMapper(){
         modelMapper.typeMap(ProductoEntradaDto.class, Producto.class)
                 .addMappings(mapper ->
@@ -192,17 +194,13 @@ public class ProductoService implements IProductoService {
                     mapper.map(ProductoEntradaDto:: getImagenEntradaDtos, Producto::setImagenes);
                     //mapper.map(ProductoEntradaDto:: getCategoriaEntradaDto,Producto::setCategoria);
                 });
-
-
         modelMapper.typeMap(Producto.class, ProductoSalidaDto.class)
                 .addMappings(mapper ->
                 {
                     mapper.map(Producto::getImagenes,ProductoSalidaDto::setImagenes);
                     mapper.map(Producto::getCategoria,ProductoSalidaDto::setCategoriaSalidaDto);
+                    mapper.map(Producto::getCaracteristicas,ProductoSalidaDto::setCaracteristicaSalidaDto);
                 });
-
-        /*modelMapper.typeMap(ProductoModificacionEntradaDto.class,Producto.class)
-                .addMappings(mapper -> mapper.map(ProductoModificacionEntradaDto::getImagenes,Producto::setImagenes));*/
 
     }
     public Producto dtoEntradaAentidad(ProductoEntradaDto productoEntradaDto){

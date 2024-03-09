@@ -2,8 +2,7 @@ package com.ebikerrent.alquilerbicicletas.service.impl;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ImagenModificacionEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ImagenEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ImagenSalidaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.ImagenSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Imagen;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ImagenService implements IImagenService {

@@ -18,7 +18,6 @@ import java.util.Set;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-//es una anotación de Jackson, que es una biblioteca de Java para procesar JSON. Esta anotación se utiliza en la definición de clases de Java que se mapearán desde o hacia JSON, y su propósito es ignorar propiedades desconocidas durante la deserialización.
 public class ProductoEntradaDto {
     @NotNull (message = "El nombre del producto no puede ser nula")
     @NotBlank(message = "El nombre debe especificarse")
@@ -37,11 +36,9 @@ public class ProductoEntradaDto {
     @NotNull(message = "El nombre de la categoría no puede ser nulo")
     @JsonProperty("categoria")
     private String categoriaString;
-    //private Long categoriaId;
 
-    /*@Valid//Valida en su propia clase
-    @JsonProperty("categoria")
-    private CategoriaEntradaDto categoriaEntradaDto;*/
-
+    //@NotNull (message = "La caracteristica del producto debe especificarse")
+    @JsonProperty("caracteristicas")
+    private Set <String> caracteristica_nombre;
 
 }

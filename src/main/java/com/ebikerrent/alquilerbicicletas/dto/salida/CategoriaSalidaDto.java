@@ -1,4 +1,4 @@
-package com.ebikerrent.alquilerbicicletas.dto.salida.producto;
+package com.ebikerrent.alquilerbicicletas.dto.salida;
 
 import lombok.*;
 
@@ -7,11 +7,12 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
-public class ImagenSalidaDto {
-    private Long id;
+public class CategoriaSalidaDto {
+    private int id;
     private String titulo;
-    private String urlImg;
+    private String descripcion;
+    private String imagen;
+
     /*@JsonProperty("productos")
     private ProductoSalidaDto productoSalidaDto;*/
-
 }

@@ -23,5 +23,4 @@ public class ImagenEntradaDto {
     @Transient
     private Long producto_id;
 
-
 }
