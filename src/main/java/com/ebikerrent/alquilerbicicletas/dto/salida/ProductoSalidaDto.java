@@ -22,7 +22,7 @@ public class ProductoSalidaDto {
     private CategoriaSalidaDto categoriaSalidaDto;
 
     @JsonProperty("imagenes")
-    private Set<ImagenSalidaDto> imagenes = new HashSet<>();
+    private Set<ImagenSalidaDtoProducto> imagenSalidaDtoProductos = new HashSet<>();
 
     @JsonProperty("caracteristicas")
     private Set<CaracteristicaSalidaDto> caracteristicaSalidaDto = new HashSet<>();

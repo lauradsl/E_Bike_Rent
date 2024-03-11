@@ -31,7 +31,7 @@ public class ProductoEntradaDto {
 
     @Valid //Valida en su propia clase
     @JsonProperty("imagenes")
-    private Set<ImagenEntradaDto> imagenEntradaDtos = new HashSet<>();
+    private Set<ImagenEntradaDtoProducto> imagenEntradaDtoProductos = new HashSet<>();
 
     @NotNull(message = "El nombre de la categoría no puede ser nulo")
     @JsonProperty("categoria")

@@ -191,13 +191,13 @@ public class ProductoService implements IProductoService {
         modelMapper.typeMap(ProductoEntradaDto.class, Producto.class)
                 .addMappings(mapper ->
                 {
-                    mapper.map(ProductoEntradaDto:: getImagenEntradaDtos, Producto::setImagenes);
+                    mapper.map(ProductoEntradaDto:: getImagenEntradaDtoProductos, Producto::setImagenes);
                     //mapper.map(ProductoEntradaDto:: getCategoriaEntradaDto,Producto::setCategoria);
                 });
         modelMapper.typeMap(Producto.class, ProductoSalidaDto.class)
                 .addMappings(mapper ->
                 {
-                    mapper.map(Producto::getImagenes,ProductoSalidaDto::setImagenes);
+                    mapper.map(Producto::getImagenes,ProductoSalidaDto::setImagenSalidaDtoProductos);
                     mapper.map(Producto::getCategoria,ProductoSalidaDto::setCategoriaSalidaDto);
                     mapper.map(Producto::getCaracteristicas,ProductoSalidaDto::setCaracteristicaSalidaDto);
                 });
