@@ -4,6 +4,7 @@ import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.UsuarioModific
 import com.ebikerrent.alquilerbicicletas.dto.entrada.usuario.UsuarioEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.UsuarioSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Usuario;
+import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.repository.UsuarioRepository;
 import com.ebikerrent.alquilerbicicletas.service.IUsuarioService;
@@ -37,7 +38,10 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
-    public UsuarioSalidaDto registrarUsuario(UsuarioEntradaDto usuario) throws BadRequestException {
+    public UsuarioSalidaDto registrarUsuario(UsuarioEntradaDto usuario) throws DuplicateEntryException {
+        if(usuarioRepository.findByMail(usuario.getMail()) != null){
+            throw new DuplicateEntryException("Existe un usuario registrado con el mismo correo: " + usuario.getMail());
+        }
         Usuario usuarioGuardado = usuarioRepository.save(dtoEntradaAEntidad(usuario));
         UsuarioSalidaDto usuarioSalidaDto = entidadADto(usuarioGuardado);
         LOGGER.info("Nuevo usuario registrado", usuarioSalidaDto);
