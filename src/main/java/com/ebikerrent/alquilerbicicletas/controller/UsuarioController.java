@@ -6,7 +6,6 @@ import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.service.IUsuarioService;
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,4 +35,15 @@ public class UsuarioController {
     public ResponseEntity<UsuarioSalidaDto> buscarPorId(@PathVariable Long id) throws ResourceNotFoundException {
         return new ResponseEntity<>(iUsuarioService.buscarUsuarioPorId(id), HttpStatus.OK);
     }
+    @PostMapping("/login")
+    public ResponseEntity<?> autenticarUsuario(@RequestParam String mail, @RequestParam String password) {
+        try {
+            UsuarioSalidaDto usuarioAutenticado = iUsuarioService.autenticarUsuario(mail, password);
+
+            return ResponseEntity.ok(usuarioAutenticado);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Las credenciales proporcionadas son incorrectas.");
+        }
+    }
+
 }

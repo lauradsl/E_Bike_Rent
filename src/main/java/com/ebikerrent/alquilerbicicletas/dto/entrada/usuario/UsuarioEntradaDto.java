@@ -29,6 +29,6 @@ public class UsuarioEntradaDto {
     @NotNull
     @Size(min = 1, max = 250)
     private String password;
-    private boolean esAdmin;
+    private boolean esAdmin = false;
 
 }

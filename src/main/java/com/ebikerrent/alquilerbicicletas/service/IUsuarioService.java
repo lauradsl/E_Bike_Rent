@@ -15,5 +15,5 @@ public interface IUsuarioService {
     UsuarioSalidaDto registrarUsuario(UsuarioEntradaDto usuario) throws BadRequestException;
     UsuarioSalidaDto buscarUsuarioPorId(Long id)throws ResourceNotFoundException;
     UsuarioSalidaDto modificarUsuario (UsuarioModificacionEntrada usuarioModificacionEntrada) throws ResourceNotFoundException;
-
+    UsuarioSalidaDto autenticarUsuario(String mail, String password)throws ResourceNotFoundException;
 }

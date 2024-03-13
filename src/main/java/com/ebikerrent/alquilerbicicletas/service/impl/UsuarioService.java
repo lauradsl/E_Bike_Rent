@@ -27,7 +27,24 @@ public class UsuarioService implements IUsuarioService {
         this.usuarioRepository = usuarioRepository;
         this.modelMapper = modelMapper;
     }
+    @Override
+    public UsuarioSalidaDto autenticarUsuario(String mail, String password) throws ResourceNotFoundException {
+        Optional<Usuario> usuarioOptional = Optional.ofNullable(usuarioRepository.findByMail(mail));
+        UsuarioSalidaDto usuarioSalidaDto = null;
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            // Verificar si la contraseña coincide
+            if (usuario.getPassword().equals(password)) {
+                usuarioSalidaDto = entidadADto(usuario);
+                return usuarioSalidaDto;
+            } else {
+                throw new ResourceNotFoundException("Las credenciales proporcionadas son incorrectas.");
+            }
+        } else {
+            throw new ResourceNotFoundException("Usuario no encontrado con el correo electrónico proporcionado: " + mail);
+        }
 
+    }
 
     @Override
     public List<UsuarioSalidaDto> listar() {
