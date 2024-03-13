@@ -12,7 +12,5 @@ Proyecto Integrador.
 2. En esta version la entidad Categoria tiene los siguientes atributos: titulo, descripcion, imagen. Se deben llenar estos datos para registrar Categoria.
 3. En la entidad Categoria, no se pueden eliminar Categorias que esten siendo usadas en Producto. Error de Integridad de Datos.
 
-### ENTIDAD USUARIO
-4. Hasta el momento la entidad Usuario NO tiene funcionamiento.
 
 

@@ -117,44 +117,43 @@ public class ImagenService implements IImagenService {
             throw new ResourceNotFoundException("No se encontro imagen con id: " + imagenModificacionEntradaDto.getId());
         }
 
-        Long imagenId = imagenModificacionEntradaDto.getId();
+        List<ProductoSalidaDto> listaProductos = productoService.listarProductos();
+        LOGGER.info("LISTA PRODUCTOS: " + listaProductos);
+        Producto productoAsociado = null;
+        for (ProductoSalidaDto productoSalida : listaProductos){
+            Producto producto = productoRepository.findById(productoSalida.getId()).orElse(null);
+            if(producto.getImagenes().stream().anyMatch(imagen -> imagen.getId().equals(imagenModificacionEntradaDto.getId()))) {
+                productoAsociado = producto;
+                LOGGER.info("PRODUCTO ASOCIADO: " + productoAsociado);
+                break;
+            }
+        }
+        LOGGER.info("PRODUCTO ASOCIADO FUER IF: " + productoAsociado);
+
+        if (productoAsociado == null) {
+            LOGGER.info("No se encontró un producto con ID: " + productoAsociado.getId());
+            throw new ResourceNotFoundException("No se encontró un producto con ID: " + productoAsociado.getId());
+        }
+
 
         Imagen imagenAmodificar = dtoModificacioAentidad(imagenModificacionEntradaDto);
-        LOGGER.info("IMAGEN A ENTIDAD: " + imagenAmodificar);
         Imagen imagenModificada = imagenRepository.save(imagenAmodificar);
-
-        List<ProductoSalidaDto> listaProductos = productoService.listarProductos();
-        LOGGER.info("LISTA PRODUCTO: " + listaProductos);
-        //necesito recorrer esta lista para buscar el producto asociado a IMAGEN
-
-        Producto productoAsociado = null;
-        for (ProductoSalidaDto productoSalidaDto : listaProductos){
-            LOGGER.info("PRODUCTO FOR1: " + listaProductos);
-
-
-            Producto producto = productoRepository.findById(productoSalidaDto.getId()).orElse(null);
-
-            LOGGER.info("PRODUCTO FOR2: " + producto);
-
-            if (producto.getImagenes().stream().anyMatch(imagen -> imagen.getId().equals(imagenId))) {
-                        productoAsociado = producto;
-                        LOGGER.info("RESULTADO IF: " + productoAsociado);
-                    }
-        }
-        //productoAsociado = productoRepository.findByImagenes(imagenModificada);
-        LOGGER.info("IMAGEN MODIFICADA: " + imagenModificada);
-        LOGGER.info("PRODUCTO ASOCIADO: " + imagenModificada);
 
         Set<Imagen> imagenesProducto = productoAsociado.getImagenes();
         LOGGER.info("IMAGENES PRODUCTO: " + imagenesProducto);
         imagenesProducto.add(imagenModificada);
+        LOGGER.info("IMAGEN AGREGADA?: " + imagenesProducto);
         productoAsociado.setImagenes(imagenesProducto);
         LOGGER.info("PRODUCTO ASOCIADO: " + productoAsociado);
 
-        productoRepository.save(productoAsociado);
-        LOGGER.info("Imagen agregada al producto: " + productoAsociado);
+
+        Producto productoGuardado = productoRepository.save(productoAsociado);
+        LOGGER.info("Imagen agregada al producto: " + productoGuardado);
+        //ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(productoGuardado);
+        //LOGGER.info("PRODUCTO SALIDA DTO: " + productoSalidaDto);
 
         ImagenSalidaDto imagenSalidaDto = entidadAdtoSalida(imagenModificada);
+        LOGGER.info("IMAGEN MODIFICACION SALIDA: " + imagenSalidaDto);
 
         return imagenSalidaDto;
     }*/

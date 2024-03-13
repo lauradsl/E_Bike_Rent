@@ -2,6 +2,7 @@ package com.ebikerrent.alquilerbicicletas.controller;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.usuario.UsuarioEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.UsuarioSalidaDto;
+import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.service.IUsuarioService;
 import jakarta.validation.Valid;
@@ -23,7 +24,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<UsuarioSalidaDto> registrar(@Valid @RequestBody UsuarioEntradaDto usuarioEntradaDto) throws BadRequestException {
+    public ResponseEntity<UsuarioSalidaDto> registrar(@Valid @RequestBody UsuarioEntradaDto usuarioEntradaDto) throws DuplicateEntryException {
         return new ResponseEntity<>(iUsuarioService.registrarUsuario(usuarioEntradaDto), HttpStatus.CREATED);
     }
 
