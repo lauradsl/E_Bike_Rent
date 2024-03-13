@@ -174,8 +174,6 @@ public class ProductoService implements IProductoService {
     @Override
     public List<ProductoSalidaDto> listarProductos() {
         List<Producto> productos = productoRepository.findAll();
-        LOGGER.info("imagenes : " + productos.get(0).getImagenes()); //mostrar las imágenes del primer producto del listado
-
 
         List<ProductoSalidaDto> productoSalidaDtoList= new ArrayList<>();
         for (Producto p: productos){
