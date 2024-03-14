@@ -28,6 +28,10 @@ public class UsuarioService implements IUsuarioService {
         this.usuarioRepository = usuarioRepository;
         this.modelMapper = modelMapper;
     }
+
+
+    //crea usuario admin
+
     @Override
     public UsuarioSalidaDto autenticarUsuario(String mail, String password) throws ResourceNotFoundException {
         Optional<Usuario> usuarioOptional = Optional.ofNullable(usuarioRepository.findByMail(mail));
