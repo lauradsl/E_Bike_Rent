@@ -1,9 +1,10 @@
 package com.ebikerrent.alquilerbicicletas;
 
 
+import com.ebikerrent.alquilerbicicletas.entity.Categoria;
 import com.ebikerrent.alquilerbicicletas.entity.Usuario;
+import com.ebikerrent.alquilerbicicletas.repository.CategoriaRepository;
 import com.ebikerrent.alquilerbicicletas.repository.UsuarioRepository;
-import com.ebikerrent.alquilerbicicletas.service.impl.UsuarioService;
 import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -22,6 +23,8 @@ import java.sql.SQLException;
 public class AlquilerBicicletasApplication {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	@Autowired
+	private CategoriaRepository categoriaRepository;
 	private static final Logger LOGGER= LoggerFactory.getLogger(AlquilerBicicletasApplication.class);
 	public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
@@ -48,5 +51,21 @@ public class AlquilerBicicletasApplication {
 			usuarioRepository.save(user);
 		}
 	}
+		@PostConstruct
+		private void inicializarCategorias() {
+			if (categoriaRepository.count() == 0) {
+				Categoria categoria1 = new Categoria();
+				categoria1.setTitulo("Ruta");
+				categoriaRepository.save(categoria1);
+
+				Categoria categoria2 = new Categoria();
+				categoria2.setTitulo("MountainBike");
+				categoriaRepository.save(categoria2);
+
+				Categoria categoria3 = new Categoria();
+				categoria3.setTitulo("Urbana");
+				categoriaRepository.save(categoria3);
+			}
+		}
 
 }
