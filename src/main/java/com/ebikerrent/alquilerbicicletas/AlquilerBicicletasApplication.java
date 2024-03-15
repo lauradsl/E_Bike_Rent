@@ -1,8 +1,10 @@
 package com.ebikerrent.alquilerbicicletas;
 
 
+import com.ebikerrent.alquilerbicicletas.entity.Caracteristica;
 import com.ebikerrent.alquilerbicicletas.entity.Categoria;
 import com.ebikerrent.alquilerbicicletas.entity.Usuario;
+import com.ebikerrent.alquilerbicicletas.repository.CaracteristicaRepository;
 import com.ebikerrent.alquilerbicicletas.repository.CategoriaRepository;
 import com.ebikerrent.alquilerbicicletas.repository.UsuarioRepository;
 import jakarta.annotation.PostConstruct;
@@ -25,6 +27,8 @@ public class AlquilerBicicletasApplication {
 	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	@Autowired
+	private CaracteristicaRepository caracteristicaRepository;
 	private static final Logger LOGGER= LoggerFactory.getLogger(AlquilerBicicletasApplication.class);
 	public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
@@ -67,5 +71,35 @@ public class AlquilerBicicletasApplication {
 				categoriaRepository.save(categoria3);
 			}
 		}
+	@PostConstruct
+	private void inicializarCaracteriscticas() {
+		if (caracteristicaRepository.count() == 0) {
+			Caracteristica caracteristica1 = new Caracteristica();
+			caracteristica1.setNombre("Ambulancia");
+			caracteristica1.setIcono("https://i.imgur.com/dBMQaSM.png");
+			caracteristicaRepository.save(caracteristica1);
+
+			Caracteristica caracteristica2 = new Caracteristica();
+			caracteristica2.setNombre("Bateria extra");
+			caracteristica2.setIcono("https://i.imgur.com/SU5Qi9O.png");
+			caracteristicaRepository.save(caracteristica2);
+
+			Caracteristica caracteristica3 = new Caracteristica();
+			caracteristica3.setNombre("GoPro");
+			caracteristica3.setIcono("https://i.imgur.com/XTLd8JW.png");
+			caracteristicaRepository.save(caracteristica3);
+
+			Caracteristica caracteristica4 = new Caracteristica();
+			caracteristica4.setNombre("Cafe/Mate");
+			caracteristica4.setIcono("https://i.imgur.com/TWorg4O.png");
+			caracteristicaRepository.save(caracteristica4);
+
+			Caracteristica caracteristica6 = new Caracteristica();
+			caracteristica6.setNombre("PlayList");
+			caracteristica6.setIcono("https://i.imgur.com/MyulwjF.png");
+			caracteristicaRepository.save(caracteristica6);
+
+		}
+	}
 
 }
