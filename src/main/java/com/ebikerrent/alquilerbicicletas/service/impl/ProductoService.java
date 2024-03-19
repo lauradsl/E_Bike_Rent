@@ -40,7 +40,7 @@ public class ProductoService implements IProductoService {
     public ProductoSalidaDto registrarProducto(ProductoEntradaDto productoEntradaDto) throws ResourceNotFoundException, DuplicateEntryException {
 
         if (productoRepository.findByNombre(productoEntradaDto.getNombre()) != null) {
-            LOGGER.info("Ya existe un producto con el mismo nombre");
+            LOGGER.info("Ya existe un producto con el mismo nombre ",productoEntradaDto.getNombre());
             throw new DuplicateEntryException("Existe un producto con el mismo nombre");
         }
 

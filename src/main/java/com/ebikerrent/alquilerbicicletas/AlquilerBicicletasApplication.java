@@ -60,14 +60,17 @@ public class AlquilerBicicletasApplication {
 			if (categoriaRepository.count() == 0) {
 				Categoria categoria1 = new Categoria();
 				categoria1.setTitulo("Ruta");
+				categoria1.setImagen("https://i.imgur.com/Tjh74DN.jpeg");
 				categoriaRepository.save(categoria1);
 
 				Categoria categoria2 = new Categoria();
-				categoria2.setTitulo("MountainBike");
+				categoria2.setTitulo("Montaña");
+				categoria2.setImagen("https://i.imgur.com/UXFtFtq.jpeg");
 				categoriaRepository.save(categoria2);
 
 				Categoria categoria3 = new Categoria();
 				categoria3.setTitulo("Urbana");
+				categoria3.setImagen("https://i.imgur.com/gDfEDdj.jpeg");
 				categoriaRepository.save(categoria3);
 			}
 		}
