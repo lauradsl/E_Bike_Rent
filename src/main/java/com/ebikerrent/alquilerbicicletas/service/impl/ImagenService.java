@@ -1,8 +1,8 @@
 package com.ebikerrent.alquilerbicicletas.service.impl;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ImagenModificacionEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ImagenEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.ImagenSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.entrada.imagen.ImagenEntradaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.imagen.ImagenSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Imagen;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;

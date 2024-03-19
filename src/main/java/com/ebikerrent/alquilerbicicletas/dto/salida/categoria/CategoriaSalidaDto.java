@@ -1,4 +1,4 @@
-package com.ebikerrent.alquilerbicicletas.dto.salida;
+package com.ebikerrent.alquilerbicicletas.dto.salida.categoria;
 
 import lombok.*;
 

@@ -1,11 +1,12 @@
-package com.ebikerrent.alquilerbicicletas.dto.salida;
+package com.ebikerrent.alquilerbicicletas.dto.salida.producto;
 
+import com.ebikerrent.alquilerbicicletas.dto.salida.caracteristica.CaracteristicaSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.categoria.CategoriaSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.imagen.ImagenSalidaDtoProducto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor

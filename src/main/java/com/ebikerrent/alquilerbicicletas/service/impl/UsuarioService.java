@@ -2,13 +2,12 @@ package com.ebikerrent.alquilerbicicletas.service.impl;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.UsuarioModificacionEntrada;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.usuario.UsuarioEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.UsuarioSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.usuario.UsuarioSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Usuario;
 import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.repository.UsuarioRepository;
 import com.ebikerrent.alquilerbicicletas.service.IUsuarioService;
-import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

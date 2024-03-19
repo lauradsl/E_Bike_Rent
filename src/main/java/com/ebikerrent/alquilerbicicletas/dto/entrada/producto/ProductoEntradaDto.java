@@ -1,5 +1,6 @@
 package com.ebikerrent.alquilerbicicletas.dto.entrada.producto;
 
+import com.ebikerrent.alquilerbicicletas.dto.entrada.imagen.ImagenEntradaDtoProducto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;

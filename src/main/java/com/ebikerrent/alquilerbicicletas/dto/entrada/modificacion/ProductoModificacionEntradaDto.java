@@ -1,13 +1,7 @@
 package com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion;
 
-import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.CategoriaEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ImagenEntradaDto;
-import com.ebikerrent.alquilerbicicletas.entity.Imagen;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Transient;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

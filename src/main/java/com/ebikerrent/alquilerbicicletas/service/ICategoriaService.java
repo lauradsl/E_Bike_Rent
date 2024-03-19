@@ -1,8 +1,8 @@
 package com.ebikerrent.alquilerbicicletas.service;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.CategoriaModificacionEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.CategoriaEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.CategoriaSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.entrada.categoria.CategoriaEntradaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.categoria.CategoriaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;

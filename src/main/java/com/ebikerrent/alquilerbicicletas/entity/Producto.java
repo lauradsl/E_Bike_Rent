@@ -3,7 +3,10 @@ package com.ebikerrent.alquilerbicicletas.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -39,6 +42,11 @@ public class Producto {
             inverseJoinColumns = @JoinColumn(name = "caracteristica_id")
     )
     private Set <Caracteristica> caracteristicas = new HashSet<>();
+
+    @OneToMany(mappedBy = "producto", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Reserva> reservas = new HashSet<>();
+
+    private List<LocalDate> fechasReservadas = new ArrayList<>();
 
     @Override
     public String toString() {

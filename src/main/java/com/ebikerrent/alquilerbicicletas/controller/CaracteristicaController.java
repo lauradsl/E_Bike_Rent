@@ -1,7 +1,7 @@
 package com.ebikerrent.alquilerbicicletas.controller;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.caracteristica.CaracteristicaEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.CaracteristicaSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.caracteristica.CaracteristicaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.service.ICaracteristicaService;
 import jakarta.validation.Valid;

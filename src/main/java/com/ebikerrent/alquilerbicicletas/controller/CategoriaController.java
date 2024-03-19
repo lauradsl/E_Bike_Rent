@@ -1,9 +1,9 @@
 package com.ebikerrent.alquilerbicicletas.controller;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.CategoriaModificacionEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.CategoriaEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.CategoriaSalidaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.ProductoSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.entrada.categoria.CategoriaEntradaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.categoria.CategoriaSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
 import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.service.ICategoriaService;

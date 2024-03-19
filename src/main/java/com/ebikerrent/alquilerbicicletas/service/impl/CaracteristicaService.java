@@ -2,7 +2,7 @@ package com.ebikerrent.alquilerbicicletas.service.impl;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.caracteristica.CaracteristicaEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.CaracteristicaModificacionEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.CaracteristicaSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.caracteristica.CaracteristicaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Caracteristica;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.repository.CaracteristicaRepository;

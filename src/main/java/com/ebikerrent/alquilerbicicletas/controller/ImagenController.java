@@ -1,9 +1,9 @@
 package com.ebikerrent.alquilerbicicletas.controller;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ImagenModificacionEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ImagenEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.ImagenSalidaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.ProductoSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.entrada.imagen.ImagenEntradaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.imagen.ImagenSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.service.IImagenService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,4 +1,4 @@
-package com.ebikerrent.alquilerbicicletas.dto.entrada.producto;
+package com.ebikerrent.alquilerbicicletas.dto.entrada.categoria;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;

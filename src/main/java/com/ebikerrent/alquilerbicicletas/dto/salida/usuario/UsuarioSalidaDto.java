@@ -1,4 +1,4 @@
-package com.ebikerrent.alquilerbicicletas.dto.salida;
+package com.ebikerrent.alquilerbicicletas.dto.salida.usuario;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

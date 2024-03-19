@@ -429,6 +429,58 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Reservas",
+			"item": [
+				{
+					"name": "Registrar reserva",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fechaInicio\": \"2024-04-01\",\r\n    \"fechaFin\": \"2024-04-05\",\r\n    \"producto_id\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/reservas/registrar",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reservas",
+								"registrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar reservas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/reservas/listar",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reservas",
+								"listar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

@@ -1,12 +1,11 @@
 package com.ebikerrent.alquilerbicicletas.controller;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.usuario.UsuarioEntradaDto;
-import com.ebikerrent.alquilerbicicletas.dto.salida.UsuarioSalidaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.usuario.UsuarioSalidaDto;
 import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.service.IUsuarioService;
 import jakarta.validation.Valid;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
