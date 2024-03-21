@@ -1,6 +1,7 @@
 package com.ebikerrent.alquilerbicicletas.controller;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ProductoModificacionEntradaDto;
+import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoDisponibleEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
 import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
@@ -110,5 +111,10 @@ public class ProductoController {
     @GetMapping("/buscarPorId/{id}")
     public ResponseEntity<ProductoSalidaDto> buscarProductoPorId(@PathVariable Long id) throws ResourceNotFoundException {
         return new ResponseEntity<>(iProductoService.buscarProductoPorId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/buscarProductoDisponible")
+    public ResponseEntity<ProductoSalidaDto>buscarProductoDisponible(@Valid @RequestBody ProductoDisponibleEntradaDto productoDisponibleEntradaDto) throws ResourceNotFoundException {
+        return new ResponseEntity<>(iProductoService.buscarProductoDisponible(productoDisponibleEntradaDto), HttpStatus.OK);
     }
 }
