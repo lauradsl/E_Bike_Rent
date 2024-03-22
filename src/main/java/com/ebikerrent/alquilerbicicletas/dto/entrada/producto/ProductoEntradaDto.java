@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +23,7 @@ import java.util.Set;
 public class ProductoEntradaDto {
     @NotNull (message = "El nombre del producto no puede ser nula")
     @NotBlank(message = "El nombre debe especificarse")
+    @Pattern(regexp = "^[A-Z0-9]+$", message = "El campo debe contener solo letras mayúsculas.")
     @Size(min = 1, max = 250)
     private String nombre;
 

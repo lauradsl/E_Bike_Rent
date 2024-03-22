@@ -16,4 +16,8 @@ public interface IReservaService {
     void eliminarReserva(Long id) throws ResourceNotFoundException;
 
     ReservaSalidaDto modificarReserva (ReservaModificacionEntradaDto reservaModificacionEntradaDto) throws ResourceNotFoundException;
+
+    public boolean buscarReservaPorProducto (ReservaEntradaDto reservaEntradaDto) throws ResourceNotFoundException;
+
+
 }

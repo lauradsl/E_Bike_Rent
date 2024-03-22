@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,45 +52,57 @@ public class ReservaService implements IReservaService {
         Producto productoBuscado = productoRepository.findById(reservaEntradaDto.getProducto_id()).orElse(null);
 
         ReservaSalidaDto reservaGuardadaDto = null;
+        LocalDate fechaInicio = reservaEntradaDto.getFechaInicio();
+        LocalDate fechaFin = reservaEntradaDto.getFechaFin();
 
-        LocalDate fechaInicio= reservaEntradaDto.getFechaInicio();
-        LocalDate fechaFin= reservaEntradaDto.getFechaFin();
-        List<LocalDate> fechaBuscada= new ArrayList<>();
-        List<LocalDate>fechasReservadas= productoBuscado.getFechasReservadas();
-        if (productoBuscado != null){
-            if (fechaFin.compareTo(fechaInicio) >= 2){
-                while (!fechaInicio.isAfter(fechaFin)){
-                    fechaBuscada.add(fechaInicio);
-                    fechaInicio = fechaInicio.plusDays(1);
-                }
-                for (LocalDate fecha: fechaBuscada){
-                    LOGGER.info("Fecha" + fecha);
-                    if (fechasReservadas.contains(fecha)){
-                        LOGGER.error("la fecha" + fecha + "se encuentra reseravda");
-                        throw new ResourceNotFoundException("La fecha" + fecha + "ya se encuentra reservada");
-                    }else {
-                        fechasReservadas.add(fecha);
-                    }
-                }
+        List<LocalDate> fechasReservadas = productoBuscado.getFechasReservadas();
+        boolean verificacion = buscarReservaPorProducto(reservaEntradaDto);
 
-                Reserva reservaRecibida = dtoEntradaAentidad(reservaEntradaDto);
-                reservaRecibida.setProducto(productoBuscado);
-
-                Reserva reservaGuardada = reservaRepository.save(reservaRecibida);
-                reservaGuardadaDto = entidadAdtoSalida(reservaGuardada);
-                LOGGER.info("Reserva realizada con exito: " + reservaRecibida);
+        if (verificacion) {
+            for (LocalDate fecha = fechaInicio; !fecha.isAfter(fechaFin); fecha = fecha.plusDays(1)) {
+                productoBuscado.getFechasReservadas().add(fecha);
             }
-            else {
-                LOGGER.error("La fecha de reserva debe ser mayor a 48hs");
-                throw  new ResourceNotFoundException("La fecha de reserva debe ser mayor a 48hs");
-            }
-        }
-        else {
+            Reserva reservaRecibida = dtoEntradaAentidad(reservaEntradaDto);
+            reservaRecibida.setProducto(productoBuscado);
+            Reserva reservaGuardada = reservaRepository.save(reservaRecibida);
+            reservaGuardadaDto = entidadAdtoSalida(reservaGuardada);
+        } else {
             LOGGER.error("El producto no existe en la BDD");
-            throw  new ResourceNotFoundException("El producto no existe en la BDD");
+            throw new ResourceNotFoundException("El producto no existe en la BDD");
         }
-    return reservaGuardadaDto;
+
+        return reservaGuardadaDto;
     }
+
+    public boolean buscarReservaPorProducto(ReservaEntradaDto reservaEntradaDto) throws ResourceNotFoundException {
+        Producto productoBuscado = productoRepository.findById(reservaEntradaDto.getProducto_id()).orElse(null);
+
+        LocalDate fechaInicio = reservaEntradaDto.getFechaInicio();
+        LocalDate fechaFin = reservaEntradaDto.getFechaFin();
+        //List<LocalDate> fechasBuscadas = new ArrayList<>();
+        List<LocalDate> fechasReservadas = productoBuscado.getFechasReservadas();
+
+        if (productoBuscado == null) {
+            LOGGER.error("El producto no existe en la BDD");
+            throw new ResourceNotFoundException("El producto no existe en la BDD");
+        }
+
+        if (ChronoUnit.DAYS.between(fechaInicio, fechaFin) < 2) {
+            LOGGER.error("La fecha de reserva debe ser mayor a 48hs");
+            throw new ResourceNotFoundException("La fecha de reserva debe ser mayor a 48hs");
+        }
+
+        for (LocalDate fecha = fechaInicio; !fecha.isAfter(fechaFin); fecha = fecha.plusDays(1)) {
+            if (fechasReservadas.contains(fecha)) {
+                LOGGER.info("La fecha: " + fecha + " hasta la fecha: " + fechaFin + " ya se encuentra reservada");
+                throw new ResourceNotFoundException("La fecha: " + fecha + " hasta la fecha: " + fechaFin + " ya se encuentra reservada"); // El producto no está disponible para las fechas buscadas
+            }
+        }
+
+        LOGGER.info("El producto se encuentra disponible para las fechas buscadas: de " + fechaInicio + " a " + fechaFin + productoBuscado.getNombre());
+        return true;
+    }
+
 
     @Override
     public ReservaSalidaDto buscarReservaPorId(Long id) throws ResourceNotFoundException {
@@ -106,21 +119,21 @@ public class ReservaService implements IReservaService {
         return null;
     }
 
-    private void configuracionMapper(){
+    private void configuracionMapper() {
         modelMapper.typeMap(Producto.class, ReservaSalidaDto.class)
                 .addMappings(mapper ->
                         mapper.map(Producto::getNombre, ReservaSalidaDto::setNombreProducto));
     }
 
-    public Reserva dtoEntradaAentidad(ReservaEntradaDto reservaEntradaDto){
+    public Reserva dtoEntradaAentidad(ReservaEntradaDto reservaEntradaDto) {
         return modelMapper.map(reservaEntradaDto, Reserva.class);
     }
 
-    public ReservaSalidaDto entidadAdtoSalida(Reserva reserva){
+    public ReservaSalidaDto entidadAdtoSalida(Reserva reserva) {
         return modelMapper.map(reserva, ReservaSalidaDto.class);
     }
 
-    public Reserva dtoModificadoAentidad( ReservaModificacionEntradaDto reservaModificacionEntradaDto){
+    public Reserva dtoModificadoAentidad(ReservaModificacionEntradaDto reservaModificacionEntradaDto) {
         return modelMapper.map(reservaModificacionEntradaDto, Reserva.class);
     }
 }

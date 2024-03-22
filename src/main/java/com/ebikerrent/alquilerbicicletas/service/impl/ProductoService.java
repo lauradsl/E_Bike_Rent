@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -42,7 +43,7 @@ public class ProductoService implements IProductoService {
     public ProductoSalidaDto registrarProducto(ProductoEntradaDto productoEntradaDto) throws ResourceNotFoundException, DuplicateEntryException {
 
         if (productoRepository.findByNombre(productoEntradaDto.getNombre()) != null) {
-            LOGGER.info("Ya existe un producto con el mismo nombre ",productoEntradaDto.getNombre());
+            LOGGER.info("Ya existe un producto con el mismo nombre ", productoEntradaDto.getNombre());
             throw new DuplicateEntryException("Existe un producto con el mismo nombre");
         }
 
@@ -55,9 +56,9 @@ public class ProductoService implements IProductoService {
 
         Set<Caracteristica> caracteristicasList = new HashSet<>();
         Set<String> arrayDeCaracteristicas = productoEntradaDto.getCaracteristica_nombre();
-        for (String caracteristica : arrayDeCaracteristicas){
+        for (String caracteristica : arrayDeCaracteristicas) {
             Caracteristica caracteristicaBuscada = caracteristicaRepository.findByNombre(caracteristica);
-            if (caracteristicaBuscada == null){
+            if (caracteristicaBuscada == null) {
                 LOGGER.error("No se encontró la caracteristica buscada");
                 throw new ResourceNotFoundException("No se encontró la caracteristica en la base de datos: " + caracteristica);
             }
@@ -80,28 +81,28 @@ public class ProductoService implements IProductoService {
         Producto productoBuscado = productoRepository.findById(id).orElse(null);
 
         ProductoSalidaDto productoEncontrado = null;
-        if (productoBuscado != null){
+        if (productoBuscado != null) {
             productoEncontrado = entidadAdtoSalida(productoBuscado);
             LOGGER.info("Producto encontrado : " + productoBuscado);
-        }else {
+        } else {
             LOGGER.error("El id del producto no se encuentra en la base de datos");
             throw new ResourceNotFoundException("En la base de datos no se encontro el producto con ID: " + id);
         }
-       return productoEncontrado;
+        return productoEncontrado;
     }
 
     @Override
     public void eliminarProducto(Long id) throws ResourceNotFoundException {
 
-    Optional<Producto> buscarProducto = productoRepository.findById(id);
+        Optional<Producto> buscarProducto = productoRepository.findById(id);
 
-    if (buscarProducto != null){
-        LOGGER.warn("Se eliminó el producto con el id : " + dtoSalidaAentidad(buscarProductoPorId(id)));
-        productoRepository.deleteById(id);
-    }else {
-        LOGGER.error("No se encontró el producto con el id : " + id);
-        throw new ResourceNotFoundException("No se encontró el producto con el id : " + id);
-    }
+        if (buscarProducto != null) {
+            LOGGER.warn("Se eliminó el producto con el id : " + dtoSalidaAentidad(buscarProductoPorId(id)));
+            productoRepository.deleteById(id);
+        } else {
+            LOGGER.error("No se encontró el producto con el id : " + id);
+            throw new ResourceNotFoundException("No se encontró el producto con el id : " + id);
+        }
     }
 
     @Override
@@ -128,11 +129,12 @@ public class ProductoService implements IProductoService {
             if (caracteristicaBuscada == null) {
                 LOGGER.error("No se encontró la caracteristica buscada");
                 throw new ResourceNotFoundException("No se encontró la caracteristica en la base de datos: " + caracteristica);
-            } caracteristicasList.add(caracteristicaBuscada);
+            }
+            caracteristicasList.add(caracteristicaBuscada);
         }
         ProductoSalidaDto productoSalidaDto = null;
 
-        if(productoBuscado != null){
+        if (productoBuscado != null) {
             LOGGER.info("PRODUCTO DENTRO DEL IF: " + productoBuscado);
             Producto productoMap = dtoModificacioAentidad(productoModificacionEntradaDto);
             productoMap.setCategoria(categoria);
@@ -161,10 +163,10 @@ public class ProductoService implements IProductoService {
         Producto productoPorNombre = productoRepository.findByNombre(nombreProducto);
 
         ProductoSalidaDto productoEncontrado = null;
-        if (productoPorNombre!= null){
+        if (productoPorNombre != null) {
             productoEncontrado = entidadAdtoSalida(productoPorNombre);
             LOGGER.info("Producto encontrado por nombre : " + productoPorNombre);
-        } else{
+        } else {
             LOGGER.info("No se encontró el producto con el nombre : " + nombreProducto);
             throw new ResourceNotFoundException("No se encontró el producto con el nombre : " + nombreProducto);
         }
@@ -172,13 +174,12 @@ public class ProductoService implements IProductoService {
     }
 
 
-
     @Override
     public List<ProductoSalidaDto> listarProductos() {
         List<Producto> productos = productoRepository.findAll();
 
-        List<ProductoSalidaDto> productoSalidaDtoList= new ArrayList<>();
-        for (Producto p: productos){
+        List<ProductoSalidaDto> productoSalidaDtoList = new ArrayList<>();
+        for (Producto p : productos) {
             ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(p);
             productoSalidaDtoList.add(productoSalidaDto);
         }
@@ -187,80 +188,75 @@ public class ProductoService implements IProductoService {
     }
 
     @Override
-    public ProductoSalidaDto buscarProductoDisponible(ProductoDisponibleEntradaDto productoDisponibleEntradaDto) throws ResourceNotFoundException {
-        Producto productoBuscado = productoRepository.findByNombre(productoDisponibleEntradaDto.getNombreProducto());
+    public List<ProductoSalidaDto> buscarProductoDisponible(ProductoDisponibleEntradaDto productoDisponibleEntradaDto) throws ResourceNotFoundException {
+        String nombreProducto = productoDisponibleEntradaDto.getNombreProducto();
         LocalDate fechaInicio = productoDisponibleEntradaDto.getFechaInicio();
         LocalDate fechaFin = productoDisponibleEntradaDto.getFechaFin();
 
-        ProductoSalidaDto productoDisponibleSalidaDto= null;
+        List<Producto> productosBuscados = productoRepository.findAllByNombreContaining(nombreProducto);
+        List<ProductoSalidaDto> productosDisponibles = new ArrayList<>();
 
-        List<LocalDate> fechaBuscada= new ArrayList<>();//inicio una lista para completar las fechas buscadas por el usuario
-
-        List<LocalDate>fechasReservadas= productoBuscado.getFechasReservadas();//traigo la lista de fechas reservadas del producto
-
-        if (productoBuscado != null){
-            if (fechaFin.compareTo(fechaInicio) >= 2) {
-                while (!fechaInicio.isAfter(fechaFin)) {
-                    fechaBuscada.add(fechaInicio);
-                    fechaInicio = fechaInicio.plusDays(1);
-                }
-                for (LocalDate fecha : fechaBuscada) {
-                    LOGGER.info("Fecha" + fecha);
-                    if (fechasReservadas.contains(fecha)) {
-                        LOGGER.error("la fecha" + fecha + "se encuentra reseravda");
-                        throw new ResourceNotFoundException("La fecha" + fecha + "ya se encuentra reservada");
-                    }
-                }
-                LOGGER.info("El producto se encuentra disponible para reservar en las fechas:" + fechaBuscada);
-                productoDisponibleSalidaDto = entidadAdtoSalida(productoBuscado);
-            } else {
+        for (Producto producto : productosBuscados) {
+            if (ChronoUnit.DAYS.between(fechaInicio, fechaFin) < 2) {
                 LOGGER.error("La fecha de reserva debe ser mayor a 48hs");
-                throw  new ResourceNotFoundException("La fecha de reserva debe ser mayor a 48hs");
+                throw new ResourceNotFoundException("La fecha de reserva debe ser mayor a 48hs");
+            } else if (buscadorProductoPorFecha(producto, fechaInicio, fechaFin)) {
+                productosDisponibles.add(entidadAdtoSalida(producto));
+            } else {
+                LOGGER.info("El producto " + producto.getNombre() + " no se encuentra disponible en esa fecha");
             }
         }
-        else {
-            LOGGER.error("El producto no existe en la BDD");
-            throw  new ResourceNotFoundException("El producto no existe en la BDD");
-        }
-        return productoDisponibleSalidaDto;
+        return productosDisponibles;
+
     }
 
 
-    private void configuracionMapper(){
+    private boolean buscadorProductoPorFecha(Producto producto, LocalDate fechaInicio, LocalDate fechaFin) {
+        for (LocalDate fecha = fechaInicio; !fecha.isAfter(fechaFin); fecha = fecha.plusDays(1)) {
+            if (producto.getFechasReservadas().contains(fecha)) {
+                LOGGER.info("La fecha: " + fecha + " hasta la fecha: " + fechaFin + " ya se encuentra reservada");
+                return false; // El producto no está disponible para las fechas buscadas
+            }
+        }
+        return true;
+    }
+
+
+    private void configuracionMapper() {
         modelMapper.typeMap(ProductoEntradaDto.class, Producto.class)
                 .addMappings(mapper ->
                 {
-                    mapper.map(ProductoEntradaDto:: getImagenEntradaDtoProductos, Producto::setImagenes);
+                    mapper.map(ProductoEntradaDto::getImagenEntradaDtoProductos, Producto::setImagenes);
                     //mapper.map(ProductoEntradaDto:: getCategoriaEntradaDto,Producto::setCategoria);
                 });
         modelMapper.typeMap(Producto.class, ProductoSalidaDto.class)
                 .addMappings(mapper ->
                 {
-                    mapper.map(Producto::getImagenes,ProductoSalidaDto::setImagenSalidaDtoProductos);
-                    mapper.map(Producto::getCategoria,ProductoSalidaDto::setCategoriaSalidaDto);
-                    mapper.map(Producto::getCaracteristicas,ProductoSalidaDto::setCaracteristicaSalidaDto);
+                    mapper.map(Producto::getImagenes, ProductoSalidaDto::setImagenSalidaDtoProductos);
+                    mapper.map(Producto::getCategoria, ProductoSalidaDto::setCategoriaSalidaDto);
+                    mapper.map(Producto::getCaracteristicas, ProductoSalidaDto::setCaracteristicaSalidaDto);
                 });
 
     }
-    public Producto dtoEntradaAentidad(ProductoEntradaDto productoEntradaDto){
-        /*Producto productoEntidad = modelMapper.map(productoEntradaDto, Producto.class);
-        productoEntidad.setCategoria(productoEntradaDto.getCategoriaId());*/
+
+    public Producto dtoEntradaAentidad(ProductoEntradaDto productoEntradaDto) {
         return modelMapper.map(productoEntradaDto, Producto.class);
     }
 
-    public ProductoSalidaDto entidadAdtoSalida(Producto producto){
+    public ProductoSalidaDto entidadAdtoSalida(Producto producto) {
         return modelMapper.map(producto, ProductoSalidaDto.class);
     }
-    public Producto dtoSalidaAentidad (ProductoSalidaDto productoSalidaDto){
+
+    public Producto dtoSalidaAentidad(ProductoSalidaDto productoSalidaDto) {
         return modelMapper.map(productoSalidaDto, Producto.class);
     }
 
-    public Producto dtoModificacioAentidad (ProductoModificacionEntradaDto productoModificacionEntradaDto){
+    public Producto dtoModificacioAentidad(ProductoModificacionEntradaDto productoModificacionEntradaDto) {
 
-        return modelMapper.map(productoModificacionEntradaDto,Producto.class);
+        return modelMapper.map(productoModificacionEntradaDto, Producto.class);
     }
 
-    public CategoriaSalidaDto entidadCatDtoSalida(Categoria categoria){
+    public CategoriaSalidaDto entidadCatDtoSalida(Categoria categoria) {
         return modelMapper.map(categoria, CategoriaSalidaDto.class);
     }
 }

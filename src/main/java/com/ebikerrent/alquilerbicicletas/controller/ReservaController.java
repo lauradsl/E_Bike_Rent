@@ -29,4 +29,9 @@ public class ReservaController {
     public ResponseEntity<List<ReservaSalidaDto>> listarTodasLasReservas(){
         return new ResponseEntity<>(iReservaService.listarReservas(), HttpStatus.OK);
     }
+
+    @GetMapping("/buscarReservaPorProducto")
+    public ResponseEntity<Boolean>buscarReservaPorProducto(@Valid @RequestBody ReservaEntradaDto reservaEntradaDto)throws ResourceNotFoundException{
+        return new ResponseEntity<>(iReservaService.buscarReservaPorProducto(reservaEntradaDto),HttpStatus.OK);
+    }
 }

@@ -125,10 +125,33 @@
 					"response": []
 				},
 				{
-					"name": "Buscar producto disponible",
+					"name": "Buscar productos disponibles",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombreProducto\" : \"BICI\",\r\n    \"fechaInicio\" : \"2024-04-05\",\r\n    \"fechaFin\" : \"2024-04-10\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/productos/buscarProducto",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos",
+								"buscarProducto"
+							]
+						}
 					},
 					"response": []
 				}
@@ -494,6 +517,14 @@
 								"listar"
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar reserva por producto",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}

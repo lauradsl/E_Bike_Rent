@@ -49,4 +49,17 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public String handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         return "Mensaje: Error de integridad de datos";}
+
+    @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> procesarValidationException(MethodArgumentNotValidException exception)
+    {
+        Map<String, String> exceptionMessage = new HashMap<>();
+        exception.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            exceptionMessage.put(fieldName, errorMessage);
+        });
+        return exceptionMessage;
+    }
 }

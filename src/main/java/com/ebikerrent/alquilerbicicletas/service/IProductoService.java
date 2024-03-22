@@ -23,5 +23,5 @@ ProductoSalidaDto modificarProducto (ProductoModificacionEntradaDto productoModi
 //List<ProductoSalidaDto> listarProductoPorCategoria();
     ProductoSalidaDto buscarProductoPorNombre(ProductoEntradaDto productoEntradaDto) throws ResourceNotFoundException;
 
-    ProductoSalidaDto buscarProductoDisponible(ProductoDisponibleEntradaDto productoDisponibleEntradaDto) throws ResourceNotFoundException;
+    List<ProductoSalidaDto> buscarProductoDisponible(ProductoDisponibleEntradaDto productoDisponibleEntradaDto) throws ResourceNotFoundException;
 }
