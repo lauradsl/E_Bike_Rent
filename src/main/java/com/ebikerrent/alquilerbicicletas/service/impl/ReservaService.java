@@ -5,6 +5,7 @@ import com.ebikerrent.alquilerbicicletas.dto.entrada.reserva.ReservaEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.reserva.ReservaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
 import com.ebikerrent.alquilerbicicletas.entity.Reserva;
+import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.repository.ProductoRepository;
 import com.ebikerrent.alquilerbicicletas.repository.ReservaRepository;
@@ -51,9 +52,14 @@ public class ReservaService implements IReservaService {
     public ReservaSalidaDto registrarReserva(ReservaEntradaDto reservaEntradaDto) throws ResourceNotFoundException {
         Producto productoBuscado = productoRepository.findById(reservaEntradaDto.getProducto_id()).orElse(null);
 
-        ReservaSalidaDto reservaGuardadaDto = null;
+        ReservaSalidaDto reservaGuardadaDto;
         LocalDate fechaInicio = reservaEntradaDto.getFechaInicio();
         LocalDate fechaFin = reservaEntradaDto.getFechaFin();
+
+        if (productoBuscado == null) {
+            LOGGER.info("No existe un producto con ID: " + reservaEntradaDto.getProducto_id());
+            throw new ResourceNotFoundException("No existe un producto con ID: " + reservaEntradaDto.getProducto_id());
+        }
 
         List<LocalDate> fechasReservadas = productoBuscado.getFechasReservadas();
         boolean verificacion = buscarReservaPorProducto(reservaEntradaDto);

@@ -113,8 +113,18 @@ public class ProductoController {
         return new ResponseEntity<>(iProductoService.buscarProductoPorId(id), HttpStatus.OK);
     }
 
+    @Operation(summary = "Listado de todos los productos disponibles para reservar")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de productos obtenido correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProductoSalidaDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content)
+    })
     @GetMapping("/buscarProductoDisponible")
-    public ResponseEntity<List<ProductoSalidaDto>>buscarProductoDisponible(@Valid @RequestBody ProductoDisponibleEntradaDto productoDisponibleEntradaDto) throws ResourceNotFoundException {
+    public ResponseEntity<List<ProductoSalidaDto>> buscarProductoDisponible(@Valid @RequestBody ProductoDisponibleEntradaDto productoDisponibleEntradaDto) throws ResourceNotFoundException {
         return new ResponseEntity<>(iProductoService.buscarProductoDisponible(productoDisponibleEntradaDto), HttpStatus.OK);
     }
 }
