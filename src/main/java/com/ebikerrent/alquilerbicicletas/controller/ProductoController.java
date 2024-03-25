@@ -123,7 +123,8 @@ public class ProductoController {
             @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content)
     })
-    @GetMapping("/buscarProductoDisponible")
+    /*@GetMapping("/buscarProductoDisponible")*/
+    @PostMapping("/buscarProductoDisponible")
     public ResponseEntity<List<ProductoSalidaDto>> buscarProductoDisponible(@Valid @RequestBody ProductoDisponibleEntradaDto productoDisponibleEntradaDto) throws ResourceNotFoundException {
         return new ResponseEntity<>(iProductoService.buscarProductoDisponible(productoDisponibleEntradaDto), HttpStatus.OK);
     }
