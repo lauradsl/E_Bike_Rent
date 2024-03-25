@@ -1,7 +1,7 @@
 package com.ebikerrent.alquilerbicicletas.service.impl;
 
-import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ImagenModificacionEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.imagen.ImagenEntradaDto;
+import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ImagenModificacionEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.imagen.ImagenSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Imagen;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
@@ -35,9 +35,9 @@ public class ImagenService implements IImagenService {
     @Override
     public List<ImagenSalidaDto> listarImagenes() {
         List<Imagen> imagenes = imagenRepository.findAll();
-        List<ImagenSalidaDto> imagenSalidaDtoList= new ArrayList<>();
+        List<ImagenSalidaDto> imagenSalidaDtoList = new ArrayList<>();
 
-        for (Imagen img: imagenes){
+        for (Imagen img : imagenes) {
 
             ImagenSalidaDto imagenSalidaDto = entidadAdtoSalida(img);
             imagenSalidaDtoList.add(imagenSalidaDto);
@@ -52,8 +52,8 @@ public class ImagenService implements IImagenService {
     public ImagenSalidaDto registrarImagen(ImagenEntradaDto imagenEntradaDto) throws ResourceNotFoundException {
 
         Producto productoBuscado = productoRepository.findById(imagenEntradaDto.getProducto_id()).orElse(null);
-        if (productoBuscado == null){
-            LOGGER.info("No existe el producto con el id "+ imagenEntradaDto.getProducto_id());
+        if (productoBuscado == null) {
+            LOGGER.info("No existe el producto con el id " + imagenEntradaDto.getProducto_id());
             throw new ResourceNotFoundException("No existe el producto");
         }
         Imagen imagenRecibida = dtoEntradaAentidad(imagenEntradaDto);
@@ -72,10 +72,10 @@ public class ImagenService implements IImagenService {
         Imagen imagenBuscado = imagenRepository.findById(id).orElse(null);
 
         ImagenSalidaDto imagenEncontrado = null;
-        if (imagenBuscado != null){
+        if (imagenBuscado != null) {
             imagenEncontrado = entidadAdtoSalida(imagenBuscado);
             LOGGER.info("Imagen encontrado : " + imagenBuscado);
-        }else {
+        } else {
             LOGGER.error("El id de la imagen no se encuentra en la base de datos");
             throw new ResourceNotFoundException("En la base de datos no se encontro la imagen con ID: " + id);
         }
@@ -84,13 +84,14 @@ public class ImagenService implements IImagenService {
 
     @Override
     public void eliminarImagen(Long id) throws ResourceNotFoundException {
-        if (buscarImagenPorId(id) != null){
+        if (buscarImagenPorId(id) != null) {
             LOGGER.warn("Se eliminó la imagen con el id : " + dtoSalidaAentidad(buscarImagenPorId(id)));
             imagenRepository.deleteById(id);
-        }else {
+        } else {
             LOGGER.error("No se encontró la imagen con el id : " + id);
             throw new ResourceNotFoundException("No se ha encontrado la imagen con id " + id);
-    }}
+        }
+    }
 
     @Override
     public ImagenSalidaDto modificarImagen(ImagenModificacionEntradaDto imagenModificacionEntradaDto) throws ResourceNotFoundException {
@@ -98,11 +99,11 @@ public class ImagenService implements IImagenService {
         Imagen imagenPorID = imagenRepository.findById(imagenAmodificar.getId()).orElse(null);
 
         ImagenSalidaDto imagenSalidaDtoModificado = null;
-        if (imagenPorID !=null){
+        if (imagenPorID != null) {
             Imagen imagenModificado = imagenRepository.save(imagenAmodificar);
             imagenSalidaDtoModificado = entidadAdtoSalida((imagenModificado));
             LOGGER.info("Imagen Modificado : " + imagenModificado);
-        }else
+        } else
             LOGGER.error("La imagen no se encontró");
 
 
@@ -159,19 +160,19 @@ public class ImagenService implements IImagenService {
     }*/
 
 
-
-    public Imagen dtoEntradaAentidad(ImagenEntradaDto imagenEntradaDto){
+    public Imagen dtoEntradaAentidad(ImagenEntradaDto imagenEntradaDto) {
         return modelMapper.map(imagenEntradaDto, Imagen.class);
     }
 
-    public ImagenSalidaDto entidadAdtoSalida(Imagen imagen){
+    public ImagenSalidaDto entidadAdtoSalida(Imagen imagen) {
         return modelMapper.map(imagen, ImagenSalidaDto.class);
     }
-    public Imagen dtoSalidaAentidad (ImagenSalidaDto imagenSalidaDto){
+
+    public Imagen dtoSalidaAentidad(ImagenSalidaDto imagenSalidaDto) {
         return modelMapper.map(imagenSalidaDto, Imagen.class);
     }
 
-    public Imagen dtoModificacioAentidad (ImagenModificacionEntradaDto imagenModificacionEntradaDto){
-        return modelMapper.map(imagenModificacionEntradaDto,Imagen.class);
+    public Imagen dtoModificacioAentidad(ImagenModificacionEntradaDto imagenModificacionEntradaDto) {
+        return modelMapper.map(imagenModificacionEntradaDto, Imagen.class);
     }
 }

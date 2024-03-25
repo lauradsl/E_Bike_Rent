@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 public class UsuarioService implements IUsuarioService {
-    private final Logger LOGGER= LoggerFactory.getLogger(UsuarioService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(UsuarioService.class);
     private final UsuarioRepository usuarioRepository;
 
     private final ModelMapper modelMapper;
@@ -27,7 +27,6 @@ public class UsuarioService implements IUsuarioService {
         this.usuarioRepository = usuarioRepository;
         this.modelMapper = modelMapper;
     }
-
 
     //crea usuario admin
 
@@ -59,7 +58,7 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public UsuarioSalidaDto registrarUsuario(UsuarioEntradaDto usuario) throws DuplicateEntryException {
-        if(usuarioRepository.findByMail(usuario.getMail()) != null){
+        if (usuarioRepository.findByMail(usuario.getMail()) != null) {
             throw new DuplicateEntryException("Existe un usuario registrado con el mismo correo: " + usuario.getMail());
         }
         Usuario usuarioGuardado = usuarioRepository.save(dtoEntradaAEntidad(usuario));
@@ -73,11 +72,10 @@ public class UsuarioService implements IUsuarioService {
         Usuario usuarioBuscado = usuarioRepository.findById(id).orElse(null);
         UsuarioSalidaDto usuarioSalidaDto = null;
 
-        if(usuarioBuscado != null){
-          usuarioSalidaDto = entidadADto(usuarioBuscado);
-          LOGGER.info("Se encontro usuario" + usuarioSalidaDto);
-        }
-        else {
+        if (usuarioBuscado != null) {
+            usuarioSalidaDto = entidadADto(usuarioBuscado);
+            LOGGER.info("Se encontro usuario" + usuarioSalidaDto);
+        } else {
             LOGGER.error("No se ecnontro usuario con id= " + id);
         }
         return usuarioSalidaDto;
@@ -86,7 +84,7 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public UsuarioSalidaDto modificarUsuario(UsuarioModificacionEntrada usuarioModificacionEntrada) throws ResourceNotFoundException {
         Optional<Usuario> usuarioAmodificar = usuarioRepository.findById(usuarioModificacionEntrada.getId());
-        if (!usuarioAmodificar.isPresent()){
+        if (!usuarioAmodificar.isPresent()) {
             throw new ResourceNotFoundException("No se encuentra usuario");
         }
 
@@ -100,7 +98,7 @@ public class UsuarioService implements IUsuarioService {
     }
 
 
-    public UsuarioSalidaDto entidadADto(Usuario usuario){
+    public UsuarioSalidaDto entidadADto(Usuario usuario) {
         return modelMapper.map(usuario, UsuarioSalidaDto.class);
     }
 }
