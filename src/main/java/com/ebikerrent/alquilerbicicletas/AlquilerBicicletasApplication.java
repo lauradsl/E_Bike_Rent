@@ -200,11 +200,21 @@ public class AlquilerBicicletasApplication {
 			for(int i=0; i< nombresProductos.length; i++){
 				Categoria categoria = categoriaRepository.findByTitulo(categoriasProductos[i]);
 
+				/*
 				Set<Imagen> imagenes = new HashSet<>();
 				Imagen imagen = new Imagen();
 				imagen.setTitulo("Titulo " + i);
 				imagen.setUrlImg(urlImagenes[i]);
 				imagenes.add(imagen);
+				 */
+				Set<Imagen> imagenes = new HashSet<>();
+
+					for (int j = 0; j < 5 ; j++) {
+						Imagen imagen = new Imagen();
+						imagen.setTitulo("Imagen " + nombresProductos[i]);
+						imagen.setUrlImg(urlImagenes[j]);
+						imagenes.add(imagen);
+					}
 
 				Producto pr = new Producto();
 				pr.setNombre(nombresProductos[i].toUpperCase());
