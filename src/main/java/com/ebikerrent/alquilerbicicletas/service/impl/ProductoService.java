@@ -193,8 +193,14 @@ public class ProductoService implements IProductoService {
         LocalDate fechaInicio = productoDisponibleEntradaDto.getFechaInicio();
         LocalDate fechaFin = productoDisponibleEntradaDto.getFechaFin();
 
-        List<Producto> productosBuscados = productoRepository.findAllByNombreContaining(nombreProducto);
+        List<Producto> productosBuscados;
         List<ProductoSalidaDto> productosDisponibles = new ArrayList<>();
+
+        if (nombreProducto == null || nombreProducto.trim().isEmpty()) {
+            productosBuscados = productoRepository.findAll();
+        } else {
+            productosBuscados = productoRepository.findAllByNombreContaining(nombreProducto.trim());
+        }
 
         for (Producto producto : productosBuscados) {
             if (ChronoUnit.DAYS.between(fechaInicio, fechaFin) < 2) {
@@ -207,7 +213,6 @@ public class ProductoService implements IProductoService {
             }
         }
         return productosDisponibles;
-
     }
 
 

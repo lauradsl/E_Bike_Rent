@@ -21,14 +21,15 @@ import java.util.Set;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductoEntradaDto {
-    @NotNull (message = "El nombre del producto no puede ser nula")
-    @NotBlank(message = "El nombre debe especificarse")
-    @Pattern(regexp = "^[A-Z0-9]+$", message = "El campo debe contener solo letras mayúsculas.")
+    @NotNull (message = "El nombre del producto no puede ser nula.")
+    @NotBlank(message = "El nombre debe especificarse.")
+    @Pattern(regexp = "^[A-Z0-9]+(\\s+[A-Z0-9]+)*$", message = "El campo debe contener solo letras mayúsculas y espacios entre palabras.")
+    //@Pattern(regexp = "^[A-Z0-9]*$", message = "El campo debe contener solo letras mayúsculas.")
     @Size(min = 1, max = 250)
     private String nombre;
 
-    @NotNull(message = "La descripción del producto no puede ser nula")
-    @NotBlank(message = "La descripción debe especificarse")
+    @NotNull(message = "La descripción del producto no puede ser nula.")
+    @NotBlank(message = "La descripción debe especificarse.")
     @Size(min = 1, max = 250)
     private String descripcion;
 
@@ -36,7 +37,7 @@ public class ProductoEntradaDto {
     @JsonProperty("imagenes")
     private Set<ImagenEntradaDtoProducto> imagenEntradaDtoProductos = new HashSet<>();
 
-    @NotNull(message = "El nombre de la categoría no puede ser nulo")
+    @NotNull(message = "El nombre de la categoría no puede ser nulo.")
     @JsonProperty("categoria")
     private String categoriaString;
 

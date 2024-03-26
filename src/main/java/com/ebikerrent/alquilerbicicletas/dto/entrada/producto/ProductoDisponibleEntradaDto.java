@@ -18,7 +18,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ProductoDisponibleEntradaDto {
     //@NotNull(message = "El producto no puede ser nulo")
-    @Pattern(regexp = "^[A-Z0-9]*$", message = "El campo debe contener solo letras mayúsculas.")
+    //@Pattern(regexp = "^\\s*[A-Z0-9][A-Z0-9\\s]*$", message = "El campo debe contener solo letras mayúsculas y números.")
+    @Pattern(regexp = "^\\s*[A-Z]*\\s*$|^\\s+$", message = "El nombre del producto debe estar en mayúsculas")
     @Size(max = 250)
     private String nombreProducto;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
