@@ -178,10 +178,17 @@ public class ProductoService implements IProductoService {
     public List<ProductoSalidaDto> listarProductos() {
         List<Producto> productos = productoRepository.findAll();
 
+        Collections.shuffle(productos);
+        int contador = 0;
         List<ProductoSalidaDto> productoSalidaDtoList = new ArrayList<>();
+
         for (Producto p : productos) {
+            if (contador >= 10){
+                break;
+            }
             ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(p);
             productoSalidaDtoList.add(productoSalidaDto);
+            contador++;
         }
         LOGGER.info("Listado de todos los productos : " + productos);
         return productoSalidaDtoList;
