@@ -94,8 +94,24 @@ public class ProductoService implements IProductoService {
     @Override
     public List<ProductoSalidaDto> listarProductos() {
 
-        //Se debe mezlcar solo el ID del Producto. Los demás objetos dentro de Producto se deben quedar quietos
-        List<Long> productoIds = productoRepository.findAllIds();
+        List<Producto> productos = productoRepository.findAll();
+
+        Collections.shuffle(productos);
+        int contador = 0;
+        List<ProductoSalidaDto> productoSalidaDtoList = new ArrayList<>();
+
+        for (Producto p : productos) {
+            if (contador >= 10){
+                break;
+            }
+            ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(p);
+            productoSalidaDtoList.add(productoSalidaDto);
+            contador++;
+        }
+        LOGGER.info("Listado de todos los productos : " + productos);
+        return productoSalidaDtoList;
+
+        /*List<Long> productoIds = productoRepository.findAllIds();
 
         Collections.shuffle(productoIds);
 
@@ -112,24 +128,8 @@ public class ProductoService implements IProductoService {
         }
 
         LOGGER.info("Listado de todos los productos mezclados por ID2: " + idsProductosMezclados);
-        return productoSalidaDtoList;
-
-         /*List<Producto> productos = productoRepository.findAll();
-
-        Collections.shuffle(productos);
-        int contador = 0;
-        List<ProductoSalidaDto> productoSalidaDtoList = new ArrayList<>();
-
-        for (Producto p : productos) {
-            if (contador >= 10){
-                break;
-            }
-            ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(p);
-            productoSalidaDtoList.add(productoSalidaDto);
-            contador++;
-        }
-        LOGGER.info("Listado de todos los productos : " + productos);
         return productoSalidaDtoList;*/
+
     }
 
     @Override
