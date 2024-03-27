@@ -66,7 +66,7 @@ public class ReservaController {
             @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content)
     })
-    @GetMapping("/buscarReservaPorProducto")
+    @PostMapping("/buscarReservaPorProducto")
     public ResponseEntity<Boolean> buscarReservaPorProducto(@Valid @RequestBody ReservaEntradaDto reservaEntradaDto) throws ResourceNotFoundException {
         return new ResponseEntity<>(iReservaService.buscarReservaPorProducto(reservaEntradaDto), HttpStatus.OK);
     }
