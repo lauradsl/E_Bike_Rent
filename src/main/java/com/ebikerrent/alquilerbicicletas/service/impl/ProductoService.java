@@ -92,6 +92,44 @@ public class ProductoService implements IProductoService {
     }
 
     @Override
+    public List<ProductoSalidaDto> listarProductos() {
+        /*List<Producto> productos = productoRepository.findAll();
+
+        Collections.shuffle(productos);
+        int contador = 0;
+        List<ProductoSalidaDto> productoSalidaDtoList = new ArrayList<>();
+
+        for (Producto p : productos) {
+            if (contador >= 10){
+                break;
+            }
+            ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(p);
+            productoSalidaDtoList.add(productoSalidaDto);
+            contador++;
+        }
+        LOGGER.info("Listado de todos los productos : " + productos);
+        return productoSalidaDtoList;*/
+
+        //Se debe mezlcar solo el ID del Producto. Los demás objetos dentro de Producto se deben quedar quietos
+        List<Long> productoIds = productoRepository.findAllIds();
+
+        Collections.shuffle(productoIds);
+
+        List<Long> idsProductosMezclados = productoIds.subList(0, Math.min(productoIds.size(), 10));
+
+        List<Producto> productosMezclados = productoRepository.findAllById(idsProductosMezclados);
+
+        List<ProductoSalidaDto> productoSalidaDtoList = new ArrayList<>();
+        for (Producto p : productosMezclados) {
+            ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(p);
+            productoSalidaDtoList.add(productoSalidaDto);
+        }
+
+        LOGGER.info("Listado de todos los productos mezclados por ID: " + idsProductosMezclados);
+        return productoSalidaDtoList;
+    }
+
+    @Override
     public void eliminarProducto(Long id) throws ResourceNotFoundException {
 
         Optional<Producto> buscarProducto = productoRepository.findById(id);
@@ -174,25 +212,7 @@ public class ProductoService implements IProductoService {
     }
 
 
-    @Override
-    public List<ProductoSalidaDto> listarProductos() {
-        List<Producto> productos = productoRepository.findAll();
 
-        Collections.shuffle(productos);
-        int contador = 0;
-        List<ProductoSalidaDto> productoSalidaDtoList = new ArrayList<>();
-
-        for (Producto p : productos) {
-            if (contador >= 10){
-                break;
-            }
-            ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(p);
-            productoSalidaDtoList.add(productoSalidaDto);
-            contador++;
-        }
-        LOGGER.info("Listado de todos los productos : " + productos);
-        return productoSalidaDtoList;
-    }
 
     @Override
     public List<ProductoSalidaDto> buscarProductoDisponible(ProductoDisponibleEntradaDto productoDisponibleEntradaDto) throws ResourceNotFoundException {
