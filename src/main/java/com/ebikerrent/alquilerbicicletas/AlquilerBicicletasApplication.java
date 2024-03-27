@@ -200,7 +200,7 @@ public class AlquilerBicicletasApplication {
 			for(int i=0; i< nombresProductos.length; i++){
 				Categoria categoria = categoriaRepository.findByTitulo(categoriasProductos[i]);
 				
-				Set<Imagen> imagenes = new HashSet<>();
+				List<Imagen> imagenes = new ArrayList<>();
 
 				for (int j = 0; j < 5 ; j++) {
 					Imagen imagen = new Imagen();

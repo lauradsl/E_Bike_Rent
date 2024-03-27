@@ -6,7 +6,9 @@ import com.ebikerrent.alquilerbicicletas.dto.salida.imagen.ImagenSalidaDtoProduc
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -23,10 +25,10 @@ public class ProductoSalidaDto {
     private CategoriaSalidaDto categoriaSalidaDto;
 
     @JsonProperty("imagenes")
-    private Set<ImagenSalidaDtoProducto> imagenSalidaDtoProductos = new HashSet<>();
+    private List<ImagenSalidaDtoProducto> imagenSalidaDtoProductos = new ArrayList<>();
 
     @JsonProperty("caracteristicas")
-    private Set<CaracteristicaSalidaDto> caracteristicaSalidaDto = new HashSet<>();
+    private List<CaracteristicaSalidaDto> caracteristicaSalidaDto = new ArrayList<>();
 
 
 
