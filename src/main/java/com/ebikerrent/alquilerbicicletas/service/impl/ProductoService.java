@@ -119,13 +119,15 @@ public class ProductoService implements IProductoService {
 
         List<Producto> productosMezclados = productoRepository.findAllById(idsProductosMezclados);
 
+        Collections.shuffle(productosMezclados);
+
         List<ProductoSalidaDto> productoSalidaDtoList = new ArrayList<>();
         for (Producto p : productosMezclados) {
             ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(p);
             productoSalidaDtoList.add(productoSalidaDto);
         }
 
-        LOGGER.info("Listado de todos los productos mezclados por ID: " + idsProductosMezclados);
+        LOGGER.info("Listado de todos los productos mezclados por ID2: " + idsProductosMezclados);
         return productoSalidaDtoList;
     }
 
