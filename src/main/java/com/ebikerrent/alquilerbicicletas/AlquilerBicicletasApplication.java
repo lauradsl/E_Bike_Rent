@@ -77,16 +77,19 @@ public class AlquilerBicicletasApplication {
 			Categoria categoria1 = new Categoria();
 			categoria1.setTitulo("Ruta");
 			categoria1.setImagen("https://i.imgur.com/Tjh74DN.jpeg");
+			categoria1.setDescripcion("Diseñadas para andar largos recorridos sobre terreno pavimentado a gran velocidad");
 			categoriaRepository.save(categoria1);
 
 			Categoria categoria2 = new Categoria();
 			categoria2.setTitulo("Montaña");
 			categoria2.setImagen("https://i.imgur.com/UXFtFtq.jpeg");
+			categoria2.setDescripcion("Son diseñadas para acompañarte en tus viajes y aventuras por terrenos irregulares");
 			categoriaRepository.save(categoria2);
 
 			Categoria categoria3 = new Categoria();
 			categoria3.setTitulo("Urbana");
 			categoria3.setImagen("https://i.imgur.com/gDfEDdj.jpeg");
+			categoria3.setDescripcion("Diseñada para ser cómoda, segura y práctica para los desplazamientos diarios.");
 			categoriaRepository.save(categoria3);
 		}
 	}
