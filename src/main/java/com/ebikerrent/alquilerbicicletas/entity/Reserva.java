@@ -25,9 +25,12 @@ public class Reserva {
     @Column(name = "fechaFinal")
     @NotNull
     private LocalDate fechaFin;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "producto_id", referencedColumnName = "id")
     private Producto producto;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    private Usuario usuario;
 
     @Override
     public String toString() {

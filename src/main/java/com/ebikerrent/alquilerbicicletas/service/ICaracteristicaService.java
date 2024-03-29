@@ -13,7 +13,7 @@ public interface ICaracteristicaService {
 
     CaracteristicaSalidaDto buscarCaracteristicaPorId(Long id);
 
-    void eliminarCaracteristica(Long id);
+    /*void eliminarCaracteristica(Long id) throws ResourceNotFoundException;*/
 
     CaracteristicaSalidaDto modificarCaracteristica (CaracteristicaModificacionEntradaDto caracteristicaModificacionEntradaDto);
 }

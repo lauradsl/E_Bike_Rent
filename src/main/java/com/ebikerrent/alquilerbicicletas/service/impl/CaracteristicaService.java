@@ -6,6 +6,7 @@ import com.ebikerrent.alquilerbicicletas.dto.salida.caracteristica.Caracteristic
 import com.ebikerrent.alquilerbicicletas.entity.Caracteristica;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.repository.CaracteristicaRepository;
+import com.ebikerrent.alquilerbicicletas.repository.ProductoRepository;
 import com.ebikerrent.alquilerbicicletas.service.ICaracteristicaService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,7 @@ public class CaracteristicaService implements ICaracteristicaService {
     private final ModelMapper modelMapper;
 
     private final CaracteristicaRepository caracteristicaRepository;
+    private final ProductoRepository productoRepository;
 
     @Override
     public CaracteristicaSalidaDto registrarCaracteristica(CaracteristicaEntradaDto caracteristicaEntradaDto) throws ResourceNotFoundException {
@@ -62,10 +64,18 @@ public class CaracteristicaService implements ICaracteristicaService {
         return caracteristicaEncontrada;
     }
 
-    @Override
-    public void eliminarCaracteristica(Long id) {
+    /*@Override
+    public void eliminarCaracteristica(Long id) throws ResourceNotFoundException {
+        Caracteristica buscarCaracteristica = caracteristicaRepository.findById(id).orElse(null);
 
-    }
+        if(buscarCaracteristica == null){
+            LOGGER.info("La caracteristica con ID: " + id + " no se encontro en la base de datos");
+            throw new ResourceNotFoundException("La caracteristica con ID: " + id + " no se encontro en la base de datos");
+        }
+        caracteristicaRepository.deleteById(id);
+        LOGGER.info("Se elimino la caracteristica con ID: " + id);
+    }*/
+
 
     @Override
     public CaracteristicaSalidaDto modificarCaracteristica(CaracteristicaModificacionEntradaDto caracteristicaModificacionEntradaDto) {

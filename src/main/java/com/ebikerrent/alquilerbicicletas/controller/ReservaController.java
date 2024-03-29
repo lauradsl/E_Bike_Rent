@@ -1,6 +1,7 @@
 package com.ebikerrent.alquilerbicicletas.controller;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.reserva.ReservaEntradaDto;
+import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.reserva.ReservaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.service.IReservaService;
@@ -69,5 +70,40 @@ public class ReservaController {
     @PostMapping("/buscarReservaPorProducto")
     public ResponseEntity<Boolean> buscarReservaPorProducto(@Valid @RequestBody ReservaEntradaDto reservaEntradaDto) throws ResourceNotFoundException {
         return new ResponseEntity<>(iReservaService.buscarReservaPorProducto(reservaEntradaDto), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Búsqueda de una reserva por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reserva obtenida correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ReservaSalidaDto.class))}),
+            @ApiResponse(responseCode = "400", description = "ID inválido",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Reserva no encontrada",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content)
+    })
+    @GetMapping("/buscarReservaPorId/{id}")
+    public ResponseEntity<ReservaSalidaDto> buscarReservaPorId(@PathVariable Long id) throws ResourceNotFoundException {
+        return new ResponseEntity<>(iReservaService.buscarReservaPorId(id), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Eliminación de una reserva por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Reserva eliminada correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = String.class))}),
+            @ApiResponse(responseCode = "400", description = "ID inválido",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Reserva no encontrada",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content)
+    })
+    @DeleteMapping("/eliminarReserva/{id}")
+    public ResponseEntity<?> eliminarReserva(@PathVariable Long id) throws ResourceNotFoundException {
+        iReservaService.eliminarReserva(id);
+        return new ResponseEntity<>("Se eliminó la reserva con ID: " + id, HttpStatus.NO_CONTENT);
     }
 }

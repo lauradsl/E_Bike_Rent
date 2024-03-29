@@ -5,10 +5,11 @@ import com.ebikerrent.alquilerbicicletas.dto.entrada.reserva.ReservaEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.reserva.ReservaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
 import com.ebikerrent.alquilerbicicletas.entity.Reserva;
-import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
+import com.ebikerrent.alquilerbicicletas.entity.Usuario;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
 import com.ebikerrent.alquilerbicicletas.repository.ProductoRepository;
 import com.ebikerrent.alquilerbicicletas.repository.ReservaRepository;
+import com.ebikerrent.alquilerbicicletas.repository.UsuarioRepository;
 import com.ebikerrent.alquilerbicicletas.service.IReservaService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -25,11 +26,13 @@ public class ReservaService implements IReservaService {
     private final Logger LOGGER = LoggerFactory.getLogger(ReservaService.class);
     private final ProductoRepository productoRepository;
     private final ReservaRepository reservaRepository;
+    private final UsuarioRepository usuarioRepository;
     private final ModelMapper modelMapper;
 
-    public ReservaService(ProductoRepository productoRepository, ReservaRepository reservaRepository, ModelMapper modelMapper) {
+    public ReservaService(ProductoRepository productoRepository, ReservaRepository reservaRepository, UsuarioRepository usuarioRepository, ModelMapper modelMapper) {
         this.productoRepository = productoRepository;
         this.reservaRepository = reservaRepository;
+        this.usuarioRepository = usuarioRepository;
         this.modelMapper = modelMapper;
         configuracionMapper();
     }
@@ -51,6 +54,7 @@ public class ReservaService implements IReservaService {
     @Override
     public ReservaSalidaDto registrarReserva(ReservaEntradaDto reservaEntradaDto) throws ResourceNotFoundException {
         Producto productoBuscado = productoRepository.findById(reservaEntradaDto.getProducto_id()).orElse(null);
+        Usuario usuarioBuscado = usuarioRepository.findByMail(reservaEntradaDto.getCorreo());
 
         ReservaSalidaDto reservaGuardadaDto;
         LocalDate fechaInicio = reservaEntradaDto.getFechaInicio();
@@ -59,6 +63,11 @@ public class ReservaService implements IReservaService {
         if (productoBuscado == null) {
             LOGGER.info("No existe un producto con ID: " + reservaEntradaDto.getProducto_id());
             throw new ResourceNotFoundException("No existe un producto con ID: " + reservaEntradaDto.getProducto_id());
+        }
+
+        if(usuarioBuscado == null){
+            LOGGER.info("No existe un usuario con correo: " + reservaEntradaDto.getCorreo());
+            throw new ResourceNotFoundException("No existe un usuario con correo: " + reservaEntradaDto.getCorreo());
         }
 
         List<LocalDate> fechasReservadas = productoBuscado.getFechasReservadas();
@@ -70,6 +79,7 @@ public class ReservaService implements IReservaService {
             }
             Reserva reservaRecibida = dtoEntradaAentidad(reservaEntradaDto);
             reservaRecibida.setProducto(productoBuscado);
+            reservaRecibida.setUsuario(usuarioBuscado);
             Reserva reservaGuardada = reservaRepository.save(reservaRecibida);
             reservaGuardadaDto = entidadAdtoSalida(reservaGuardada);
         } else {
@@ -112,11 +122,26 @@ public class ReservaService implements IReservaService {
 
     @Override
     public ReservaSalidaDto buscarReservaPorId(Long id) throws ResourceNotFoundException {
-        return null;
+        Reserva reservaBuscada = reservaRepository.findById(id).orElse(null);
+        ReservaSalidaDto reservaSalidaDto;
+        if(reservaBuscada == null){
+            LOGGER.info("No se encontro la reserva con ID: " + id);
+            throw new ResourceNotFoundException("No se encontro la reserva con ID: " + id);
+        }
+        reservaRepository.save(reservaBuscada);
+        reservaSalidaDto = entidadAdtoSalida(reservaBuscada);
+        return reservaSalidaDto;
     }
 
     @Override
     public void eliminarReserva(Long id) throws ResourceNotFoundException {
+        Reserva reservaBuscada = reservaRepository.findById(id).orElse(null);
+        if(reservaBuscada == null){
+            LOGGER.info("No se encontro la reserva con ID: " + id);
+            throw new ResourceNotFoundException("No se encontro la reserva con ID: " + id);
+        }
+        reservaRepository.delete(reservaBuscada);
+        LOGGER.info("Se eliminó la reserva ID: " + id);
 
     }
 
@@ -126,10 +151,13 @@ public class ReservaService implements IReservaService {
     }
 
     private void configuracionMapper() {
-        modelMapper.typeMap(Producto.class, ReservaSalidaDto.class)
+        modelMapper.typeMap(Reserva.class, ReservaSalidaDto.class)
                 .addMappings(mapper ->
-                        mapper.map(Producto::getNombre, ReservaSalidaDto::setNombreProducto));
-    }
+                        {
+                            mapper.map(Reserva::getProducto, ReservaSalidaDto::setProducto);
+                            mapper.map(Reserva::getUsuario, ReservaSalidaDto::setUsuario);
+                        });
+    };
 
     public Reserva dtoEntradaAentidad(ReservaEntradaDto reservaEntradaDto) {
         return modelMapper.map(reservaEntradaDto, Reserva.class);

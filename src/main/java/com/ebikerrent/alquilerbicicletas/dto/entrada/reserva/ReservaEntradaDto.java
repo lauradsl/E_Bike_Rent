@@ -2,7 +2,9 @@ package com.ebikerrent.alquilerbicicletas.dto.entrada.reserva;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,4 +29,8 @@ public class ReservaEntradaDto {
     private LocalDate fechaFin;
     @NotNull(message = "El producto no puede ser nulo")
     private Long producto_id;
+    @NotNull(message = "El ususario no puede ser nulo")
+    @NotBlank(message = "El ususario debe esepecificarse")
+    @Email
+    private String correo;
 }
