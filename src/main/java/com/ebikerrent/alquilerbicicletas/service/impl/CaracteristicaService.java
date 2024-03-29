@@ -64,17 +64,19 @@ public class CaracteristicaService implements ICaracteristicaService {
         return caracteristicaEncontrada;
     }
 
-    /*@Override
+    @Override
     public void eliminarCaracteristica(Long id) throws ResourceNotFoundException {
-        Caracteristica buscarCaracteristica = caracteristicaRepository.findById(id).orElse(null);
+        Caracteristica caracteristicaBuscada = caracteristicaRepository.findById(id).orElse(null);
 
-        if(buscarCaracteristica == null){
-            LOGGER.info("La caracteristica con ID: " + id + " no se encontro en la base de datos");
-            throw new ResourceNotFoundException("La caracteristica con ID: " + id + " no se encontro en la base de datos");
+        if (caracteristicaBuscada == null) {
+            LOGGER.error("No se encontró la caracteristica en la base de datos");
+            throw new ResourceNotFoundException("No se encontró la caracteristica en la base de datos");
+        } else {
+            caracteristicaRepository.deleteById(id);
+            LOGGER.warn("Se eliminó la caracteristica con id: " + id);
         }
-        caracteristicaRepository.deleteById(id);
-        LOGGER.info("Se elimino la caracteristica con ID: " + id);
-    }*/
+    }
+
 
 
     @Override
