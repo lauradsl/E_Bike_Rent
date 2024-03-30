@@ -3,6 +3,7 @@ package com.ebikerrent.alquilerbicicletas.service.impl;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ProductoModificacionEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoDisponibleEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoEntradaDto;
+import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoPorCategoria;
 import com.ebikerrent.alquilerbicicletas.dto.salida.categoria.CategoriaSalidaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
 import com.ebikerrent.alquilerbicicletas.entity.Caracteristica;
@@ -110,26 +111,6 @@ public class ProductoService implements IProductoService {
         }
         LOGGER.info("Listado de todos los productos : " + productos);
         return productoSalidaDtoList;
-
-        /*List<Long> productoIds = productoRepository.findAllIds();
-
-        Collections.shuffle(productoIds);
-
-        List<Long> idsProductosMezclados = productoIds.subList(0, Math.min(productoIds.size(), 10));
-
-        List<Producto> productosMezclados = productoRepository.findAllById(idsProductosMezclados);
-
-        Collections.shuffle(productosMezclados);
-
-        List<ProductoSalidaDto> productoSalidaDtoList = new ArrayList<>();
-        for (Producto p : productosMezclados) {
-            ProductoSalidaDto productoSalidaDto = entidadAdtoSalida(p);
-            productoSalidaDtoList.add(productoSalidaDto);
-        }
-
-        LOGGER.info("Listado de todos los productos mezclados por ID2: " + idsProductosMezclados);
-        return productoSalidaDtoList;*/
-
     }
 
     @Override
@@ -199,6 +180,26 @@ public class ProductoService implements IProductoService {
     }
 
     @Override
+    public List<ProductoSalidaDto> listarProductoPorCategoria(ProductoPorCategoria productoPorCategoria) throws ResourceNotFoundException {
+        String categoria = productoPorCategoria.getNombreCategoria();
+        Categoria categoriaBuscada = categoriaRepository.findByTitulo(categoria);
+        List<ProductoSalidaDto> productoSalidaDtoList = new ArrayList<>();
+
+        if (categoriaBuscada == null) {
+            LOGGER.info("La categoria con nombre: " + categoria + " no existe.");
+            throw new ResourceNotFoundException("La categoria con nombre: " + categoria + " no existe.");
+        } else {
+            List<Producto> productosBuscados = productoRepository.findAllByCategoria(categoriaBuscada);
+            for (Producto producto : productosBuscados) {
+                    productoSalidaDtoList.add(entidadAdtoSalida(producto));
+                    Collections.shuffle(productoSalidaDtoList);
+                    LOGGER.info("Productos por categoria: " + productoSalidaDtoList);
+            }
+        }
+        return productoSalidaDtoList;
+    }
+
+    @Override
     public ProductoSalidaDto buscarProductoPorNombre(ProductoEntradaDto productoEntradaDto) throws ResourceNotFoundException {
         String nombreProducto = productoEntradaDto.getNombre();
         Producto productoPorNombre = productoRepository.findByNombre(nombreProducto);
@@ -213,8 +214,6 @@ public class ProductoService implements IProductoService {
         }
         return productoEncontrado;
     }
-
-
 
 
     @Override

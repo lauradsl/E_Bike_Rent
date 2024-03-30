@@ -151,6 +151,25 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Listar productos por categoria",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/productos/listarProductosPorCategoria",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productos",
+								"listarProductosPorCategoria"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

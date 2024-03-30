@@ -3,6 +3,7 @@ package com.ebikerrent.alquilerbicicletas.controller;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.modificacion.ProductoModificacionEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoDisponibleEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoEntradaDto;
+import com.ebikerrent.alquilerbicicletas.dto.entrada.producto.ProductoPorCategoria;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
 import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
@@ -123,9 +124,23 @@ public class ProductoController {
             @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content)
     })
-    /*@GetMapping("/buscarProductoDisponible")*/
     @PostMapping("/buscarProductoDisponible")
     public ResponseEntity<List<ProductoSalidaDto>> buscarProductoDisponible(@Valid @RequestBody ProductoDisponibleEntradaDto productoDisponibleEntradaDto) throws ResourceNotFoundException {
         return new ResponseEntity<>(iProductoService.buscarProductoDisponible(productoDisponibleEntradaDto), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Listado de todos los productos por categoria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listado de productos por categoria obtenido correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProductoSalidaDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad Request",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content)
+    })
+    @PostMapping("/listarProductosPorCategoria")
+    public ResponseEntity<List<ProductoSalidaDto>> listarProductoPorCategoria(@Valid @RequestBody ProductoPorCategoria productoPorCategoria) throws ResourceNotFoundException {
+        return new ResponseEntity<>(iProductoService.listarProductoPorCategoria(productoPorCategoria),HttpStatus.OK);
     }
 }

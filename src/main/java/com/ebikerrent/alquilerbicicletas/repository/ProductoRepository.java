@@ -1,5 +1,6 @@
 package com.ebikerrent.alquilerbicicletas.repository;
 
+import com.ebikerrent.alquilerbicicletas.entity.Categoria;
 import com.ebikerrent.alquilerbicicletas.entity.Imagen;
 import com.ebikerrent.alquilerbicicletas.entity.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,6 @@ public interface ProductoRepository extends JpaRepository<Producto,Long> {
 
     @Query("SELECT p.id FROM Producto p")
     List<Long> findAllIds();
+
+    List<Producto> findAllByCategoria(Categoria categoria);
 }
