@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ReservaService implements IReservaService {
@@ -98,6 +99,12 @@ public class ReservaService implements IReservaService {
         //List<LocalDate> fechasBuscadas = new ArrayList<>();
         List<LocalDate> fechasReservadas = productoBuscado.getFechasReservadas();
 
+        Set<Reserva> reservas = productoBuscado.getReservas();
+        for (Reserva reserva : reservas) {
+            LocalDate fechaInicioProducto = reserva.getFechaInicio();
+            LocalDate fechaFinProducto = reserva.getFechaFin();
+
+
         if (productoBuscado == null) {
             LOGGER.error("El producto no existe en la BDD");
             throw new ResourceNotFoundException("El producto no existe en la BDD");
@@ -110,12 +117,14 @@ public class ReservaService implements IReservaService {
 
         for (LocalDate fecha = fechaInicio; !fecha.isAfter(fechaFin); fecha = fecha.plusDays(1)) {
             if (fechasReservadas.contains(fecha)) {
-                LOGGER.info("La fecha: " + fecha + " hasta la fecha: " + fechaFin + " ya se encuentra reservada");
-                throw new ResourceNotFoundException("La fecha: " + fecha + " hasta la fecha: " + fechaFin + " ya se encuentra reservada"); // El producto no está disponible para las fechas buscadas
+                LOGGER.info("La fecha: " + fechaInicioProducto + " hasta la fecha: " + fechaFinProducto + " ya se encuentra reservada");
+                throw new ResourceNotFoundException("La fecha: " + fechaInicioProducto + " hasta la fecha: " + fechaFinProducto + " ya se encuentra reservada"); // El producto no está disponible para las fechas buscadas
             }
         }
 
-        LOGGER.info("El producto se encuentra disponible para las fechas buscadas: de " + fechaInicio + " a " + fechaFin + productoBuscado.getNombre());
+        }
+
+        LOGGER.info("El producto se encuentra disponible para las fechas buscadas: de " + fechaInicio + " a " + fechaFin + " " + productoBuscado.getNombre());
         return true;
     }
 
