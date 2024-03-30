@@ -6,6 +6,7 @@ import com.ebikerrent.alquilerbicicletas.dto.salida.imagen.ImagenSalidaDtoProduc
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +30,8 @@ public class ProductoSalidaDto {
 
     @JsonProperty("caracteristicas")
     private List<CaracteristicaSalidaDto> caracteristicaSalidaDto = new ArrayList<>();
+    @JsonProperty("reservas")
+    private List<LocalDate> fechasReservadas = new ArrayList<>();
 
 
 

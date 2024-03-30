@@ -1,9 +1,13 @@
 package com.ebikerrent.alquilerbicicletas.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -34,5 +38,6 @@ public class Usuario {
     private String password;
 
     private boolean esAdmin;
-
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Reserva> reservas = new ArrayList<>();
 }

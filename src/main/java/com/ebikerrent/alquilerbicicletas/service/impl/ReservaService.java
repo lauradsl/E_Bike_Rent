@@ -110,8 +110,8 @@ public class ReservaService implements IReservaService {
 
         for (LocalDate fecha = fechaInicio; !fecha.isAfter(fechaFin); fecha = fecha.plusDays(1)) {
             if (fechasReservadas.contains(fecha)) {
-                LOGGER.info("La fecha: " + fecha + " hasta la fecha: " + fechaFin + " ya se encuentra reservada");
-                throw new ResourceNotFoundException("La fecha: " + fecha + " hasta la fecha: " + fechaFin + " ya se encuentra reservada"); // El producto no está disponible para las fechas buscadas
+                LOGGER.info("La fecha: " + fecha + " ya se encuentra reservada");
+                throw new ResourceNotFoundException("La fecha: " + fecha + " ya se encuentra reservada");
             }
         }
 
