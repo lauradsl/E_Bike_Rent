@@ -99,11 +99,6 @@ public class ReservaService implements IReservaService {
         //List<LocalDate> fechasBuscadas = new ArrayList<>();
         List<LocalDate> fechasReservadas = productoBuscado.getFechasReservadas();
 
-        Set<Reserva> reservas = productoBuscado.getReservas();
-        for (Reserva reserva : reservas) {
-            LocalDate fechaInicioProducto = reserva.getFechaInicio();
-            LocalDate fechaFinProducto = reserva.getFechaFin();
-
 
         if (productoBuscado == null) {
             LOGGER.error("El producto no existe en la BDD");
@@ -122,8 +117,6 @@ public class ReservaService implements IReservaService {
                 throw new ResourceNotFoundException("La fecha: " + fecha + " ya se encuentra reservada");
 
             }
-        }
-
         }
 
         LOGGER.info("El producto se encuentra disponible para las fechas buscadas: de " + fechaInicio + " a " + fechaFin + " " + productoBuscado.getNombre());
