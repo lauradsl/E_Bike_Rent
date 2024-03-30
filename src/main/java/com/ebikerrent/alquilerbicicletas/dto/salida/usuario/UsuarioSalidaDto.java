@@ -1,6 +1,7 @@
 package com.ebikerrent.alquilerbicicletas.dto.salida.usuario;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public class UsuarioSalidaDto {
     private String nombre;
     private String apellido;
     private String mail;
+    private String telefono;
     private boolean esAdmin;
 }

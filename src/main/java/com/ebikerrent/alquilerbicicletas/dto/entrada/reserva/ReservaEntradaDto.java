@@ -29,8 +29,8 @@ public class ReservaEntradaDto {
     private LocalDate fechaFin;
     @NotNull(message = "El producto no puede ser nulo")
     private Long producto_id;
-    @NotNull(message = "El ususario no puede ser nulo")
-    @NotBlank(message = "El ususario debe esepecificarse")
+    @NotNull(message = "El usuario no puede ser nulo")
+    @NotBlank(message = "El usuario debe esepecificarse")
     @Email
     private String correo;
 }

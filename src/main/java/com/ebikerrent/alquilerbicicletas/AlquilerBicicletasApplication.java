@@ -66,6 +66,7 @@ public class AlquilerBicicletasApplication {
 			user.setNombre("Admin");
 			user.setApellido("Admin");
 			user.setMail("admin@admin.com");
+			user.setTelefono("3101234567");
 			user.setPassword("password");
 			user.setEsAdmin(true);
 			usuarioRepository.save(user);
