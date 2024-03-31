@@ -140,10 +140,21 @@ public class ReservaService implements IReservaService {
     @Override
     public void eliminarReserva(Long id) throws ResourceNotFoundException {
         Reserva reservaBuscada = reservaRepository.findById(id).orElse(null);
+        LocalDate fechaInicio = reservaBuscada.getFechaInicio();
+        LocalDate fechaFin = reservaBuscada.getFechaFin();
+
         if(reservaBuscada == null){
             LOGGER.info("No se encontro la reserva con ID: " + id);
             throw new ResourceNotFoundException("No se encontro la reserva con ID: " + id);
         }
+        Producto productoAsociado = reservaBuscada.getProducto();
+        List<LocalDate> fechasReservadas = productoAsociado.getFechasReservadas();
+        for (LocalDate fecha = fechaInicio; !fecha.isAfter(fechaFin); fecha = fecha.plusDays(1)){
+            final  LocalDate fechaActual = fecha;
+            fechasReservadas.removeIf(fechaReservada -> fechaReservada.equals((fechaActual)));
+        }
+        productoAsociado.setFechasReservadas(fechasReservadas);
+        productoRepository.save(productoAsociado);
         reservaRepository.delete(reservaBuscada);
         LOGGER.info("Se eliminó la reserva ID: " + id);
 
