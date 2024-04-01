@@ -66,7 +66,7 @@ public class ReservaService implements IReservaService {
             throw new ResourceNotFoundException("No existe un producto con ID: " + reservaEntradaDto.getProducto_id());
         }
 
-        if(usuarioBuscado == null){
+        if (usuarioBuscado == null) {
             LOGGER.info("No existe un usuario con correo: " + reservaEntradaDto.getCorreo());
             throw new ResourceNotFoundException("No existe un usuario con correo: " + reservaEntradaDto.getCorreo());
         }
@@ -128,14 +128,18 @@ public class ReservaService implements IReservaService {
     public ReservaSalidaDto buscarReservaPorId(Long id) throws ResourceNotFoundException {
         Reserva reservaBuscada = reservaRepository.findById(id).orElse(null);
         ReservaSalidaDto reservaSalidaDto;
-        if(reservaBuscada == null){
+
+        if (reservaBuscada != null) {
+            reservaSalidaDto = entidadAdtoSalida(reservaBuscada);
+            LOGGER.info("Reserva encontrada:" + reservaSalidaDto);
+
+        } else {
             LOGGER.info("No se encontro la reserva con ID: " + id);
             throw new ResourceNotFoundException("No se encontro la reserva con ID: " + id);
         }
-        reservaRepository.save(reservaBuscada);
-        reservaSalidaDto = entidadAdtoSalida(reservaBuscada);
         return reservaSalidaDto;
     }
+
 
     @Override
     public void eliminarReserva(Long id) throws ResourceNotFoundException {

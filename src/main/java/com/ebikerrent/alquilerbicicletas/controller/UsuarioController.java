@@ -38,7 +38,7 @@ public class UsuarioController {
                     content = @Content)
     })
     @PostMapping("/registrar")
-    public ResponseEntity<UsuarioSalidaDto> registrar(@Valid @RequestBody UsuarioEntradaDto usuarioEntradaDto) throws DuplicateEntryException {
+    public ResponseEntity<UsuarioSalidaDto> registrar(@Valid @RequestBody UsuarioEntradaDto usuarioEntradaDto) throws DuplicateEntryException, ResourceNotFoundException {
         return new ResponseEntity<>(iUsuarioService.registrarUsuario(usuarioEntradaDto), HttpStatus.CREATED);
     }
 

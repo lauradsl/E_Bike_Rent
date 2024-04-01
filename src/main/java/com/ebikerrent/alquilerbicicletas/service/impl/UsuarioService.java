@@ -72,11 +72,13 @@ public class UsuarioService implements IUsuarioService {
         Usuario usuarioBuscado = usuarioRepository.findById(id).orElse(null);
         UsuarioSalidaDto usuarioSalidaDto = null;
 
-        if (usuarioBuscado != null) {
+        if (usuarioBuscado == null) {
+            LOGGER.error("No se ecnontro usuario con id:" + id);
+            throw new  ResourceNotFoundException ("No se ecnontro usuario con id=" + id);
+
+        } else {
             usuarioSalidaDto = entidadADto(usuarioBuscado);
             LOGGER.info("Se encontro usuario" + usuarioSalidaDto);
-        } else {
-            LOGGER.error("No se ecnontro usuario con id= " + id);
         }
         return usuarioSalidaDto;
     }
