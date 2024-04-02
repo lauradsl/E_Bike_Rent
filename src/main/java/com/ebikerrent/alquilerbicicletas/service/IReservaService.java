@@ -18,6 +18,7 @@ public interface IReservaService {
     ReservaSalidaDto modificarReserva (ReservaModificacionEntradaDto reservaModificacionEntradaDto) throws ResourceNotFoundException;
 
     public boolean buscarReservaPorProducto (ReservaEntradaDto reservaEntradaDto) throws ResourceNotFoundException;
+    //List<ReservaSalidaDto> listarReservasPorUsuario(Long id) throws ResourceNotFoundException;// buscamos por id? o ReservaEntradaDto.
 
 
 }

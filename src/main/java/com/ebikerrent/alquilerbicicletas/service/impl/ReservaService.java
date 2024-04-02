@@ -122,6 +122,22 @@ public class ReservaService implements IReservaService {
         LOGGER.info("El producto se encuentra disponible para las fechas buscadas: de " + fechaInicio + " a " + fechaFin + " " + productoBuscado.getNombre());
         return true;
     }
+/*
+    @Override
+    public List<ReservaSalidaDto> listarReservasPorUsuario(Long id) throws ResourceNotFoundException {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario == null){
+            LOGGER.info("No existe el usuario con ese id: " + id);
+            throw new ResourceNotFoundException("No existe el usuario con ese id: " + id);
+        }
+        List<Reserva> reservasUsuario = reservaRepository.findByUsuarioId(id);
+        List<ReservaSalidaDto> reservaSalidaDtoList = new ArrayList<>();
+
+
+        return null;
+    }
+
+ */
 
 
     @Override
