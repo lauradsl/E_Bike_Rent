@@ -55,7 +55,19 @@ public class CaracteristicaController {
         return new ResponseEntity<>(iCaracteristicaService.listarCaracteristicas(), HttpStatus.OK);
     }
 
-@DeleteMapping("eliminar/{id}")
+    @Operation(summary = "Eliminación de una característica por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Característica eliminada correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = String.class))}),
+            @ApiResponse(responseCode = "400", description = "ID inválido",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Característica no encontrada",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Server error",
+                    content = @Content)
+    })
+    @DeleteMapping("eliminar/{id}")
     public  ResponseEntity<String>eliminarCaracteristica(@PathVariable Long id) throws ResourceNotFoundException{
         iCaracteristicaService.eliminarCaracteristica(id);
     return new ResponseEntity<>("Caracteristica eliminada correctamente", HttpStatus.NO_CONTENT);
