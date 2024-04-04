@@ -1,15 +1,11 @@
 package com.ebikerrent.alquilerbicicletas;
 
 
-import com.ebikerrent.alquilerbicicletas.entity.Caracteristica;
-import com.ebikerrent.alquilerbicicletas.entity.Categoria;
-import com.ebikerrent.alquilerbicicletas.entity.Usuario;
-import com.ebikerrent.alquilerbicicletas.entity.Producto;
-import com.ebikerrent.alquilerbicicletas.entity.Imagen;
+import com.ebikerrent.alquilerbicicletas.entity.*;
 import com.ebikerrent.alquilerbicicletas.repository.CaracteristicaRepository;
 import com.ebikerrent.alquilerbicicletas.repository.CategoriaRepository;
-import com.ebikerrent.alquilerbicicletas.repository.UsuarioRepository;
 import com.ebikerrent.alquilerbicicletas.repository.ProductoRepository;
+import com.ebikerrent.alquilerbicicletas.repository.UsuarioRepository;
 import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -18,13 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 
 @SpringBootApplication
@@ -51,6 +47,17 @@ public class AlquilerBicicletasApplication {
 	public ModelMapper modelMapper(){
 		return new ModelMapper();
 	}
+
+	@PostConstruct
+	public void started() {
+		//TimeZone.setDefault(TimeZone.getTimeZone("America/Argentina/Buenos_Aires"));
+		TimeZone.setDefault(TimeZone.getTimeZone("Australia/Sydney"));
+		LOGGER.info("HORA " + LocalDateTime.now());
+		ZoneId zoneId = ZoneId.systemDefault();
+		System.out.println("Zona horaria actual: " + zoneId);
+	}
+
+
 
 	@PostConstruct
 	public void inicializar() {
