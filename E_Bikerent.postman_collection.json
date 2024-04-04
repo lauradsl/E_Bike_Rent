@@ -110,7 +110,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/productos/buscarPorId/1",
+							"raw": "localhost:8080/productos/buscarPorId/17",
 							"host": [
 								"localhost"
 							],
@@ -118,7 +118,7 @@
 							"path": [
 								"productos",
 								"buscarPorId",
-								"1"
+								"17"
 							]
 						}
 					},
@@ -619,6 +619,39 @@
 								"reservas",
 								"eliminarReserva",
 								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ProductoFavorito",
+			"item": [
+				{
+					"name": "Agregar a favorito",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"correo\":\"admin@admin.com\",\r\n    \"producto_id\":7,\r\n    \"favorito\":\"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/productoFavorito/agregar",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"productoFavorito",
+								"agregar"
 							]
 						}
 					},

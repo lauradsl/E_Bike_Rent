@@ -30,11 +30,8 @@ public class ProductoSalidaDto {
 
     @JsonProperty("caracteristicas")
     private List<CaracteristicaSalidaDto> caracteristicaSalidaDto = new ArrayList<>();
+
     @JsonProperty("reservas")
     private List<LocalDate> fechasReservadas = new ArrayList<>();
-
-
-
-
 
 }

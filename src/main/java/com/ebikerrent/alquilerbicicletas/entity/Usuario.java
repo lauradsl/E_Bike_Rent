@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString
 @Table(name = "usuarios")
 public class Usuario {
     @Id
@@ -45,4 +44,7 @@ public class Usuario {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Reserva> reservas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Favorito> favorito = new ArrayList<>();
 }

@@ -229,6 +229,7 @@ public class ProductoService implements IProductoService {
             productosBuscados = productoRepository.findAll();
         } else {
             productosBuscados = productoRepository.findAllByNombreContaining(nombreProducto.trim());
+            LOGGER.info("PRODUCTOS BUSCADOS: " + productosBuscados);
         }
 
         for (Producto producto : productosBuscados) {
@@ -270,7 +271,6 @@ public class ProductoService implements IProductoService {
                     mapper.map(Producto::getCategoria, ProductoSalidaDto::setCategoriaSalidaDto);
                     mapper.map(Producto::getCaracteristicas, ProductoSalidaDto::setCaracteristicaSalidaDto);
                 });
-
     }
 
     public Producto dtoEntradaAentidad(ProductoEntradaDto productoEntradaDto) {

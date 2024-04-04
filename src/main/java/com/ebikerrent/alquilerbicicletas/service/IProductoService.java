@@ -18,6 +18,6 @@ public interface IProductoService {
     void eliminarProducto(Long id) throws ResourceNotFoundException;
     ProductoSalidaDto modificarProducto (ProductoModificacionEntradaDto productoModificacionEntradaDto) throws ResourceNotFoundException;
     List<ProductoSalidaDto> listarProductoPorCategoria(ProductoPorCategoria productoPorCategoria) throws ResourceNotFoundException;
-   ProductoSalidaDto buscarProductoPorNombre(ProductoEntradaDto productoEntradaDto) throws ResourceNotFoundException;
+    ProductoSalidaDto buscarProductoPorNombre(ProductoEntradaDto productoEntradaDto) throws ResourceNotFoundException;
     List<ProductoSalidaDto> buscarProductoDisponible(ProductoDisponibleEntradaDto productoDisponibleEntradaDto) throws ResourceNotFoundException;
 }

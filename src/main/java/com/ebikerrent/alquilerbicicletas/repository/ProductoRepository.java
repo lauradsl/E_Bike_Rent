@@ -13,12 +13,7 @@ import java.util.List;
 public interface ProductoRepository extends JpaRepository<Producto,Long> {
     Producto findByNombre(String nombre);
 
-    Producto findByImagenes(Imagen idImagen);
-
     List<Producto> findAllByNombreContaining(String nombre);
-
-    @Query("SELECT p.id FROM Producto p")
-    List<Long> findAllIds();
 
     List<Producto> findAllByCategoria(Categoria categoria);
 }

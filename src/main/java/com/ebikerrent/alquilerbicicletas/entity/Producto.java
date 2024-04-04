@@ -48,6 +48,9 @@ public class Producto {
 
     private List<LocalDate> fechasReservadas = new ArrayList<>();
 
+    @OneToMany(mappedBy = "producto", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Favorito> favorito = new ArrayList<>();
+
     @Override
     public String toString() {
         return "Producto{" +

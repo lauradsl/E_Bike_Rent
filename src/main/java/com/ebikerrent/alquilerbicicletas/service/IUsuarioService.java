@@ -5,6 +5,7 @@ import com.ebikerrent.alquilerbicicletas.dto.entrada.usuario.UsuarioEntradaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.usuario.UsuarioSalidaDto;
 import com.ebikerrent.alquilerbicicletas.exceptions.DuplicateEntryException;
 import com.ebikerrent.alquilerbicicletas.exceptions.ResourceNotFoundException;
+import com.ebikerrent.alquilerbicicletas.service.impl.UsuarioService;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface IUsuarioService {
     UsuarioSalidaDto buscarUsuarioPorId(Long id)throws ResourceNotFoundException;
     UsuarioSalidaDto modificarUsuario (UsuarioModificacionEntrada usuarioModificacionEntrada) throws ResourceNotFoundException;
     UsuarioSalidaDto autenticarUsuario(String mail, String password)throws ResourceNotFoundException;
+
+    UsuarioSalidaDto buscarUsuarioPorCorreo(String correo) throws ResourceNotFoundException;
 }

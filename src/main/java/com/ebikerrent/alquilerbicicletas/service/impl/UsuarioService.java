@@ -50,6 +50,23 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
+    public UsuarioSalidaDto buscarUsuarioPorCorreo(String correo) throws ResourceNotFoundException {
+        Usuario usuarioBuscado = usuarioRepository.findByMail(correo);
+        UsuarioSalidaDto usuarioSalidaDto;
+
+        if (usuarioBuscado == null) {
+            LOGGER.error("No se encontro usuario con correo :" + correo);
+            throw new  ResourceNotFoundException ("No se encontro usuario con correo: " + correo);
+
+        } else {
+            usuarioSalidaDto = entidadADto(usuarioBuscado);
+            LOGGER.info("Se encontro usuario" + usuarioSalidaDto);
+        }
+        return usuarioSalidaDto;
+
+    }
+
+    @Override
     public List<UsuarioSalidaDto> listar() {
         List<UsuarioSalidaDto> usuarios = usuarioRepository.findAll().stream().map(this::entidadADto).toList();
         LOGGER.info("Usuarios registrados", usuarios);
