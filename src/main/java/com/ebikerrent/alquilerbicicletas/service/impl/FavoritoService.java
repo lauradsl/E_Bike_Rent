@@ -1,6 +1,7 @@
 package com.ebikerrent.alquilerbicicletas.service.impl;
 
 import com.ebikerrent.alquilerbicicletas.dto.entrada.favorito.FavoritoEntrada;
+import com.ebikerrent.alquilerbicicletas.dto.entrada.favorito.FavoritoEntradaLista;
 import com.ebikerrent.alquilerbicicletas.dto.salida.favorito.FavoritoSalida;
 import com.ebikerrent.alquilerbicicletas.dto.salida.producto.ProductoSalidaDto;
 import com.ebikerrent.alquilerbicicletas.dto.salida.usuario.UsuarioSalidaDto;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -86,10 +88,25 @@ public class FavoritoService implements IFavoritoService {
     }
 
     @Override
-    public List<FavoritoSalida> listarProductosFavoritosPorUsuario(String correoUsuario) {
+    public List<ProductoSalidaDto> listarProductosFavoritosPorUsuario(FavoritoEntradaLista favoritoEntrada) throws ResourceNotFoundException {
+        String correoUsuario = favoritoEntrada.getCorreo();
         Usuario usuario = usuarioRepository.findByMail(correoUsuario);
-
-        return null;
+        if (usuario == null) {
+            LOGGER.info("No existe un usuario con correo: " + correoUsuario);
+            throw new ResourceNotFoundException("No existe un usuario con correo: " + correoUsuario);
+        }
+        List<Favorito> favoritos = favoritoRepository.findByUsuario(usuario);
+        List<ProductoSalidaDto> productosFavoritos = new ArrayList<>();
+        if(!favoritos.isEmpty()){
+            for (Favorito favorito : favoritos) {
+                FavoritoSalida favoritoSalida = entidadAdtoSalida(favorito);
+                productosFavoritos.add(favoritoSalida.getProducto());
+            }
+        } else {
+            LOGGER.info("No tiene productos en la lista de favoritos");
+            throw new ResourceNotFoundException("No tiene productos en la lista de favoritos");
+        }
+        return productosFavoritos;
     }
 
     @Override
